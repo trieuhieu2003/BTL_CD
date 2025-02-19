@@ -1,4 +1,4 @@
-<?php>
+<?php
   // start session
   session_start();
 
@@ -36,18 +36,18 @@
     <link rel="stylesheet" href="css/login.css" />
   </head>
   <body id="loginBody">
-    <?php if(!empty($error_message)): {?>
+    <?php if(!empty($error_message)): ?>
       <div id="error_message">
         <strong>Error:</strong> <p><?= $error_message ?></p>
       </div>
-    <?php }; ?> 
+    <?php endif; ?> 
     <div class="container">
       <div class="loginHeader">
         <h1>Đăng nhập</h1>
         <p>Quản lý kho</p>
       </div>
         <div class="loginBody">
-          <form action="">
+          <form action="login.php" method="post">
             <div class="loginInputContainer">
             <label for="username">Tên đăng nhập</label>
               <input type="text" id="username" name="username" placeholder="Tên đăng nhập"/>
