@@ -131,12 +131,13 @@ div.loginInputsContainer input {
     text-align: center;
 }
 
-div.loginButtomContainer {
+div.loginInputsContainer {
     margin-top: 40px;
     text-align: center;
 }
 
-div.loginButtomContainer button {
+
+div.loginInputsContainer button {
     font-size: 30px;
     padding: 10px 20px;
     background: #f685a2;
