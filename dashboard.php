@@ -18,11 +18,36 @@ $user = $_SESSION['user'];
 
 <body>
     <div id="dashboardMainContainer">
+<<<<<<< HEAD
         <?php include('app_sidebar.php')?>
         </div>
         <div class="dashboard_content_container">
         <?php include('app_topnav.php')?>
 
+=======
+        <div class="dashboard_sidebar" id="dashboard_sidebar">
+            <h3 class="dashboard_logo" id="dashboard_logo">IMS</h3>
+            <div class="dashboard_sidebar_user">
+                <img src="images\user\DSCF1892.jpg" alt="User image." />
+                <span>Trung Hieu</span>
+            </div>
+            <div class="dashboard_sidebar_menus">
+                <ul class="dashboard_menu_lists">
+                    <li class="menuActive">
+                        <a href=""><i class="fas fa-gauge"></i><span class="menuText"> Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fas fa-gauge"></i><span class="menuText"> Dashboard</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="dashboard_content_container">
+            <div class="dashboard_topNav">
+                <a href=""><i class="fas fa-bars"></i></a>
+                <a href="" id="logoutBtn"><i class="fas fa-power-off"></i> Đăng xuất</a>
+            </div>
+>>>>>>> ae2f931eb5578a43049e718399fa6bd0ea300760
             <div class="dashboard_content">
                 <div class="dashboard_content_main">
 
