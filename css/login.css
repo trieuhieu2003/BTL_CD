@@ -439,6 +439,7 @@ div.dashboard_sidebar_user span {
 }
 
 ul.dashboard_menu_lists {
+    list-style: none;
 
     margin-top: 20px;
 }
@@ -452,13 +453,13 @@ ul.dashboard_menu_lists li {
 ul.dashboard_menu_lists li a {
     text-decoration: none;
     color: #fff;
-    height: 100%;
     display: block;
     font-size: 20px;
 }
 
 ul.dashboard_menu_lists li a i {
     font-size: 25px;
+    margin-right: 10px;
 }
 
 ul.dashboard_menu_lists li.menuActive {
