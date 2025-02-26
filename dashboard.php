@@ -30,7 +30,7 @@ $user = $_SESSION['user'];
                         <a href=""><i class="fas fa-gauge"></i><span class="menuText"> Dashboard</span></a>
                     </li>
                     <li>
-                        <a href=""><i class="fas fa-gauge"></i><span class="menuText"> Dashboard</span></a>
+                        <a href="user_add.php"><i class="fas fa-gauge"></i><span class="menuText">Add User</span></a>
                     </li>
                 </ul>
             </div>
