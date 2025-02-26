@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            background: #f8f9fa;
+        }
+        .sidebar {
+            width: 250px;
+            background: #222;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+        }
+        .sidebar h2 {
+            font-size: 24px;
+            color: #ff6b81;
+        }
+        .sidebar p {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            color: white;
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+        }
+        .sidebar a:hover, .sidebar .active {
+            background: #ff6b81;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+        table img {
+            width: 50px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>IMS</h2>
+        <p>JOHN DOE</p>
+        <a href="#" class="active">Dashboard</a>
+        <a href="#">Reports</a>
+        <a href="#">Product</a>
+        <a href="#">View Product</a>
+        <a href="#">Add Product</a>
+        <a href="#">Supplier</a>
+        <a href="#">Purchase Order</a>
+        <a href="#">User</a>
+    </div>
+    <div class="content">
+        <h3>📋 List of Products</h3>
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Stock</th>
+                    <th>Description</th>
+                    <th>Suppliers</th>
+                    <th>Created By</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><img src="nescafe.jpg"></td>
+                    <td>Nescafe</td>
+                    <td>9</td>
+                    <td>This is a coffee bean</td>
+                    <td>Nestle</td>
+                    <td>John Doe</td>
+                    <td>Apr 28, 2023 @ 06:12:59 AM</td>
+                    <td>Apr 28, 2023 @ 06:12:59 AM</td>
+                    <td><a href="#">✏️ Edit</a> | <a href="#">🗑️ Delete</a></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><img src="kitkat.jpg"></td>
+                    <td>Kitkat</td>
+                    <td>14</td>
+                    <td>This is a chocolate</td>
+                    <td>Nestle, Robinson</td>
+                    <td>NGọc Anh</td>
+                    <td>Apr 28, 2023 @ 06:12:38 AM</td>
+                    <td>Apr 28, 2023 @ 06:12:38 AM</td>
+                    <td><a href="#">✏️ Edit</a> | <a href="#">🗑️ Delete</a></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><img src="milo.jpg"></td>
+                    <td>Milo</td>
+                    <td>0</td>
+                    <td>This is an energy drink</td>
+                    <td>Robinson</td>
+                    <td>NGọc Anh</td>
+                    <td>Apr 28, 2023 @ 06:12:06 AM</td>
+                    <td>Apr 28, 2023 @ 06:12:06 AM</td>
+                    <td><a href="#">✏️ Edit</a> | <a href="#">🗑️ Delete</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
