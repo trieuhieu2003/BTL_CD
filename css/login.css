@@ -514,17 +514,16 @@ div.dashboard_content_main {
   height: 100%;
 }
 
-div#error_message {
-  color: red;
-  font-size: 20px;
-  text-align: center;
-  margin-top: 20px;
-  padding: 20px;
+div.loginButtomContainer button {
+  font-size: 30px;
+  padding: 10px 20px;
+  background: #f685a2;
+  border: none;
+  color: #fff;
 }
-
 
 div.header {
   width: 100%;
-  height: 20px;
-  background: #a47864;
+  height: 30px;
+  background: #f685a2;
 }

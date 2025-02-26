@@ -2,6 +2,8 @@
   // start session
   session_start();
 
+  if(isset($_SESSION['user'])) header('location: dashboard.php');
+
     $error_message = '';
   if($_POST){
     include('database/connection.php');
@@ -47,7 +49,7 @@
         <p>Quản lý kho</p>
       </div>
         <div class="loginBody">
-          <form action="login.php" method="post">
+          <form action="login.php" method="POST">
             <div class="loginInputContainer">
             <label for="username">Tên đăng nhập</label>
               <input type="text" id="username" name="username" placeholder="Tên đăng nhập"/>
