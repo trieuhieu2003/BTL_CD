@@ -515,3 +515,10 @@ div.dashboard_content_main {
     min-height: 800px;
     height: 100%;
 }
+p.responseMessage {
+    font-size: 18px;
+    text-align: center;
+    margin-top:33px ;
+    background: rgba(0 ,128, 0, 0.1);
+    padding: 20px;
+}
