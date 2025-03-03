@@ -27,7 +27,8 @@ $user = $_SESSION[''];
         <?php include('app_topnav.php')?>
         <div class="dashboard_content">
             <div class="dashboard_content_main">
-                <form action="" class="appForm">
+
+                <form action="database/users-add.php" method="POST" class="appForm">
                     <div class="appFormInputContainer">
                         <label for="firt_Name">Họ</label>
                         <input type="text" class="appFormInput" id="first_Name" name="first_Name">
