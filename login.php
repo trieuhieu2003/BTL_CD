@@ -39,7 +39,7 @@ if ($_POST) {
 
 <body id="loginBody">
   <?php if (!empty($error_message)){ ?>
-    <div id="error_message">
+    <div id="errorMessage">
       <strong>Error:</strong>
       </p><?= $error_message ?></p>
     </div>

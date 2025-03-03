@@ -2,7 +2,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "inventory";
+    $dbname = "kho";
 
     // Create connection
     try {
