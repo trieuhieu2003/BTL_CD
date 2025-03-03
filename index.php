@@ -38,21 +38,23 @@
         <div class="homepageFeatures">
             <div class="homepageFeature">
                 <span class="featureIcon"><i class="fas fa-cog" aria-hidden="true"></i></span>
-                <h3 class="featureTitle">gì đó 1</h3>
-                <p class="featureDescription">Nội dung gì đó 1 một ngày đẹp trời mát mẻ, học hành chăm chỉ, cơm nước ấm
-                    no hạnh phúc với vợ con</p>
+                <h3 class="featureTitle">Chuyên nghiệp</h3>
+                <p class="featureDescription">Chúng tôi là đội ngũ chuyên gia với nhiều năm kinh nghiệm trong lĩnh vực
+                    quản lý kho và logistics. Với sự am hiểu sâu sắc về vận hành kho hàng, chúng tôi cam kết mang đến
+                    giải pháp tối ưu giúp doanh nghiệp kiểm soát hàng hóa một cách chính xác và hiệu quả.</p>
             </div>
             <div class="homepageFeature">
                 <span class="featureIcon"><i class="fas fa-star" aria-hidden="true"></i></span>
-                <h3 class="featureTitle">Gì đó 2</h3>
-                <p class="featureDescription">Nôi dung gì đó 2 anh ăn mày quá khứ học tập tốt lên không phụ lòng bố mẹ
-                    ông bà cụ kỵ tôr tiên mua nhà mua xe </p>
+                <h3 class="featureTitle">Uy tín</h3>
+                <p class="featureDescription">Chúng tôi cam kết cung cấp một hệ thống quản lý kho chính xác, ổn định và
+                    an toàn tuyệt đối. Mọi dữ liệu đều được bảo mật nghiêm ngặt, giúp doanh nghiệp kiểm soát hàng tồn
+                    kho một cách minh bạch và hiệu quả.</p>
             </div>
             <div class="homepageFeature">
                 <span class="featureIcon"><i class="fas fa-globe" aria-hidden="true"></i></span>
-                <h3 class="featureTitle">Gì đó 3</h3>
-                <p class="featureDescription">Nội dung cần tuyển gấp 10 nhân viên nam và 14 nhân viên vữ phục vụ các chị
-                    gái nhiều tiền có vị thế </p>
+                <h3 class="featureTitle">Đồng hành bền vững</h3>
+                <p class="featureDescription">Chúng tôi không chỉ cung cấp giải pháp, mà còn đồng hành và hỗ trợ bạn
+                    trong từng bước quản lý kho, giúp mọi quy trình trở nên dễ dàng và hiệu quả hơn.</p>
             </div>
         </div>
     </div>
@@ -61,9 +63,8 @@
             <div class="homepageNotifiedContainer">
                 <div class="emailForm">
                     <h3>Nhận thông báo cập nhật</h3>
-                    <p>Văn bản demo thử nhiệm về hệ thống quản lý kho, bao gồm các chức năng quản lý đơn hàng, quản lý
-                        người dùng. quản lý sản phẩm, mà một số chức năng trong tương lai sẽ phát triển giúp hệ thống
-                        ngày càng hoàn thiện hiện phục vụ nhu cầu của khách hàng</p>
+                    <p>Đừng bỏ lỡ những cập nhật quan trọng! Bật thông báo để nhận ngay thông tin mới nhất về hệ thống,
+                        giúp bạn quản lý kho dễ dàng và hiệu quả hơn.</p>
                     <form action="">
                         <div class="formContainer">
                             <input type="text" placeholder="Email Address" />
