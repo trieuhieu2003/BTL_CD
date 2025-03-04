@@ -39,7 +39,7 @@ $users = include('database/show-users.php');
                             <div id="userAddFormContainer">
                                 <form action="database/add.php" method="POST" class="appForm">
                                     <div class="appFormInputContainer">
-                                        <label for="firt_Name">Họ</label>
+                                        <label for="first_Name">Họ</label>
                                         <input type="text" class="appFormInput" id="first_Name" name="first_name">
                                     </div>
                                     <div class="appFormInputContainer">
@@ -86,6 +86,7 @@ $users = include('database/show-users.php');
                                                 <th>Email</th>
                                                 <th>Ngày tạo</th>
                                                 <th>Ngày cập nhật</th>
+                                                <th>Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -98,6 +99,13 @@ $users = include('database/show-users.php');
                                                     <td><?= $user['email'] ?></td>
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($user['created_at'])) ?></td>
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($user['updated_at'])) ?></td>
+
+                                                    <td>
+                                                        <a href=""><i class="fa fa-pencil"></i>Sửa</a>
+                                                        <a href="" class="deleteUser" data-userid="<?= $user['id'] ?>" data-fname="<?= $user['first_name'] ?>" data-lname="<?= $user['last_name'] ?>"><i class="fa fa-trash"></i>Xoá</a>
+                                                    </td>
+s
+
                                                 </tr>
                                             <?php } ?>
 
@@ -131,21 +139,32 @@ $users = include('database/show-users.php');
                         targetElement = e.target;
                         classList = targetElement.classList;
 
-                        classlíst = e.target.classList;
                         if (classList.contains('deleteUser')) {
 
                             e.preventDefault();
                             userId = targetElement.dataset.userid;
                             fname = targetElement.dataset.fname;
                             lname = targetElement.dataset.lname;
+                            fullName = fname + ' ' + lname;
 
                             if (window.confirm('Bạn có muốn xoá không ' + fullName + '?')) {
                                 $.ajax({
                                     method: 'POST',
                                     data: {
-                                        user_id: userId
+                                        user_id: userId,
+                                        f_name: fname,
+                                        l_name: lname
                                     },
-                                    url: 'database/delete-user.php'
+                                    url: 'database/delete-user.php',
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if (response.success) {
+                                            alert(response.message);
+                                            window.location.reload();
+                                        } else {
+                                            alert(response.message);
+                                        }
+                                    }
                                 })
                             } else {
                                 console.log('Không xoá')
@@ -155,6 +174,8 @@ $users = include('database/show-users.php');
                     });
                 }
         }
+        var myScript = new script();
+        myScript.initialize();
     </script>
     </div>
 </body>
