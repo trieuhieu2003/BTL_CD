@@ -13,7 +13,7 @@ var ToggleBtn = document.querySelector('.dashboard_topNav a');
                     dashboard_sidebar.style.width = '10%';
                     dashboard_sidebar.style.transition = '0.5s all';
                     dashboard_content_container.style.width = '90%';
-                    dashboard_logo.style.fontSize = '80px';
+                    dashboard_logo.style.fontSize = '60px';
                     userImage.style.width = '60px';
 
                     var menuIcons = document.getElementsByClassName('menuText');

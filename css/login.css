@@ -87,6 +87,7 @@ div.loginHeader h1 {
 
 div.loginHeader p {
   color: #ffdae3;
+  text-decoration: none;
   font-size: 50px;
   margin: 0px;
   text-transform: uppercase;
@@ -563,9 +564,9 @@ div.header {
   width: 100%;
   height: 30px;
   background: #f685a2;
-  width: 60px;
+  /* width: 60px; */
   display: inline-block;
-  border-radius: 50%;
+  /* border-radius: 50%; */
   border: 2px solid #f685a2;
   margin-right: 5px;
   vertical-align: middle;
@@ -648,9 +649,10 @@ a#logoutBtn {
   padding: 70px 20px 20px 20px;
 } */
 
-div.dashboard_content {
+/* mới sửa */
+/* div.dashboard_content {
   padding: 50px 10px 10px 10px;
-}
+} */
 
 div.dashboard_content_main {
   background: #fff;
@@ -666,10 +668,21 @@ div#errorMessage {
   font-size: 20px;
   padding: 11px;
 }
+
+/* form user_add */
+
 p.responseMessage {
   font-size: 18px;
   text-align: center;
-  margin-top:33px ;
-  background: rgba(0 ,128, 0, 0.1);
+  margin-top: 33px;
+  background: rgba(0, 128, 0, 0.1);
   padding: 20px;
+}
+
+p.responseMessage_error {
+  background: rgb(255, 0, 0);
+}
+
+p.responseMessage_success {
+  background: rgba(0, 128, 0, 0.1);
 }
