@@ -1,9 +1,11 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['user']))
     header('location: login.php');
 $_SESSION['table'] = 'users';
 $user = $_SESSION['user'];
+$users = include('database/show-users.php');
 
 ?>
 
@@ -74,6 +76,7 @@ $user = $_SESSION['user'];
                             <h1 class="section_header"><i class="fa fa-list"></i> Danh sách người dùng</h1>
                             <div class="section_content">
                                 <div class="users">
+
                                     <table>
                                         <thead>
                                             <tr>
@@ -86,16 +89,21 @@ $user = $_SESSION['user'];
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Tran</td>
-                                                <td>Dung</td>
-                                                <td>trandung@email.com</td>
-                                                <td>February 25, 2025 @ 5:00PM</td>
-                                                <td>February 25, 2025 @ 5:30PM</td>
-                                            </tr>
+                                            <?php
+                                            foreach ($users as $index => $user) { ?>
+                                                <tr>
+                                                    <td><?= $index + 1 ?></td>
+                                                    <td><?= $user['first_name'] ?></td>
+                                                    <td><?= $user['last_name'] ?></td>
+                                                    <td><?= $user['email'] ?></td>
+                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($user['created_at'])) ?></td>
+                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($user['updated_at'])) ?></td>
+                                                </tr>
+                                            <?php } ?>
+
                                         </tbody>
                                     </table>
+                                    <p class="userCount"><?= count($users) ?> Người dùng</p>
                                 </div>
                             </div>
                         </div>
