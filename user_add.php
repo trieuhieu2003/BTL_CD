@@ -106,7 +106,7 @@ $users = include('database/show-users.php');
                                                         <a href="" class="updateUser" data-userid="<?= $user['id'] ?>"><i class="fa fa-pencil"></i>Sửa</a>
                                                         <a href="" class="deleteUser" data-userid="<?= $user['id'] ?>" data-fname="<?= $user['first_name'] ?>" data-lname="<?= $user['last_name'] ?>"><i class="fa fa-trash"></i>Xoá</a>
                                                     </td>
-s
+
 
                                                 </tr>
                                             <?php } ?>
