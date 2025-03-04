@@ -20,9 +20,9 @@ $users = include('database/show-users.php');
     <link rel="stylesheet" href="css/user_add.css">
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"
         integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 </head>
 
 <body>
@@ -39,7 +39,7 @@ $users = include('database/show-users.php');
                             <div id="userAddFormContainer">
                                 <form action="database/add.php" method="POST" class="appForm">
                                     <div class="appFormInputContainer">
-                                        <label for="firt_Name">Họ</label>
+                                        <label for="first_Name">Họ</label>
                                         <input type="text" class="appFormInput" id="first_Name" name="first_name">
                                     </div>
                                     <div class="appFormInputContainer">
@@ -86,6 +86,7 @@ $users = include('database/show-users.php');
                                                 <th>Email</th>
                                                 <th>Ngày tạo</th>
                                                 <th>Ngày cập nhật</th>
+                                                <th>Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -98,6 +99,10 @@ $users = include('database/show-users.php');
                                                     <td><?= $user['email'] ?></td>
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($user['created_at'])) ?></td>
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($user['updated_at'])) ?></td>
+                                                    <td>
+                                                        <a href=""><i class="fa fa-pencil"></i>Sửa</a>
+                                                        <a href="" class="deleteUser" data-userid="<?= $user['id'] ?>" data-fname="<?= $user['first_name'] ?>" data-lname="<?= $user['last_name'] ?>"><i class="fa fa-trash"></i>Xoá</a>
+                                                    </td>
                                                 </tr>
                                             <?php } ?>
 
@@ -131,21 +136,32 @@ $users = include('database/show-users.php');
                         targetElement = e.target;
                         classList = targetElement.classList;
 
-                        classlíst = e.target.classList;
                         if (classList.contains('deleteUser')) {
 
                             e.preventDefault();
                             userId = targetElement.dataset.userid;
                             fname = targetElement.dataset.fname;
                             lname = targetElement.dataset.lname;
+                            fullName = fname + ' ' + lname;
 
                             if (window.confirm('Bạn có muốn xoá không ' + fullName + '?')) {
                                 $.ajax({
                                     method: 'POST',
                                     data: {
-                                        user_id: userId
+                                        user_id: userId,
+                                        f_name: fname,
+                                        l_name: lname
                                     },
-                                    url: 'database/delete-user.php'
+                                    url: 'database/delete-user.php',
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if (response.success) {
+                                            alert(response.message);
+                                            window.location.reload();
+                                        } else {
+                                            alert(response.message);
+                                        }
+                                    }
                                 })
                             } else {
                                 console.log('Không xoá')
@@ -155,6 +171,8 @@ $users = include('database/show-users.php');
                     });
                 }
         }
+        var myScript = new script();
+        myScript.initialize();
     </script>
     </div>
 </body>

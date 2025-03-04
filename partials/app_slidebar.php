@@ -6,21 +6,31 @@
     </div>
     <div class="dashboard_sidebar_menus">
         <ul class="dashboard_menu_lists">
-            <li class="menuActive">
+        <!-- class="menuActive" -->
+            <li class = "liMainMenu">
                 <a href="./dashboard.php"><i class="fas fa-dashboard"></i><span class="menuText"> Dashboard</span></a>
             </li>
-            <li>
-                <a href=""><i class="fas fa-gauge"></i><span class="menuText"> Dashboard</span></a>
+            <li class = "liMainMenu">
+                <a href="#"><i class="fas fa-gauge"></i><span class="menuText"> Product Management</span></a>
             </li>
-            <li>
-                <a href=""><i class="fas fa-gauge"></i><span class="menuText"> Dashboard</span></a>
+            <li class = "liMainMenu">
+                <a href="#"><i class="fas fa-gauge">
+                </i><span class="menuText"> Supplier Management</span>
+            </a>
             </li>
-            <li>
-                <a href=""><i class="fas fa-gauge"></i><span class="menuText"> Dashboard</span></a>
+            <li class = "liMainMenu">
+                <a href="./user_add.php">
+                    <i class="fas fa-user-plus"></i>
+                    <span class="menuText"> User Management </span>
+                    <i class="fas fa-angle-down mainMenuIconArrow"></i>
+
+                </a>
+                <ul class="subMenus">
+                    <li><a class="subMenuLink" href=""><i class="fas fa-circle"></i>view users</a></li>
+                    <li><a class="subMenuLink" href=""><i class="fas fa-circle"></i>add user</a></li>   
+                </ul>
             </li>
-            <li>
-                <a href="./user_add.php"><i class="fas fa-user-plus"></i><span class="menuText"> Add User</span></a>
-            </li>
+            
         </ul>
     </div>
 </div>
