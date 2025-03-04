@@ -474,32 +474,37 @@ div.dashboard_sidebar_user span {
 }
 
 ul.dashboard_menu_lists {
-  /* padding: 20px; */
+  padding: 20px;
   margin-top: 20px;
+  list-style: none;
 }
 
-ul.dashboard_menu_lists li {
-  padding: 15px 15px;
+ul.dashboard_menu_lists li.liMainMenu {
+  padding-top: 15px ;
   /* font-size: 18px; */
   text-transform: uppercase;
 }
 
-ul.dashboard_menu_lists li a {
+ul.dashboard_menu_lists li.liMainMenu a {
   text-decoration: none;
   color: #fff;
   /* height: 100%; */
   display: block;
-  font-size: 20px;
+  font-size: 14px;
+  padding: 0px 15px;
+  padding-bottom: 15px;
+  padding-right: 0px;
 }
 
-ul.dashboard_menu_lists li a i {
-  font-size: 25px;
+ul.dashboard_menu_lists li.liMainMenu a i {
+  font-size: 13px;
+  width: 30px;
 }
 
-ul.dashboard_menu_lists li.menuActive {
+/* ul.dashboard_menu_lists li.menuActive {
   background: #f685a2;
   color: #fff;
-}
+} */
 
 ul.dashboard_menu_lists li:hover {
   background: #f685a2;
@@ -686,3 +691,26 @@ p.responseMessage_error {
 p.responseMessage_success {
   background: rgba(0, 128, 0, 0.1);
 }
+ul.subMenus{
+  list-style: none;
+  background: #c26a80 ;
+  padding: unset;
+  /* display: none; */
+}
+a.subMenuLink{
+  padding-top: 10px !important;
+  padding-left: 25px!important;
+  padding-bottom: 10px!important;
+  text-decoration: none;
+  font-size: 15px !important;
+}
+a.subMenuLink i{
+  font-size: 10px !important;
+  width:  16px !important;
+}
+i.mainMenuIconArrow{
+  float: right;
+  font-size: 15px !important;
+  margin-top: 7px;;
+}
+
