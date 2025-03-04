@@ -1,9 +1,9 @@
 <?php
 session_start();
-if(!isset($_SESSION['user']))
+if (!isset($_SESSION['user']))
     header('location: login.php');
-    $_SESSION['table'] = 'users';
-    $user = $_SESSION['user'];
+$_SESSION['table'] = 'users';
+$user = $_SESSION['user'];
 
 ?>
 
@@ -25,93 +25,129 @@ if(!isset($_SESSION['user']))
 
 <body>
     <div id="dashboardMainContainer">
-        <?php include('app_slidebar.php')?>
+        <?php include('partials/app_slidebar.php') ?>
         <div class="dashboard_content_container">
-        <?php include('app_topnav.php')?>
-        <div class="dashboard_content">
-            <div class="dashboard_content_main">
+            <?php include('partials/app_topnav.php') ?>
+            <div class="dashboard_content">
+                <div class="dashboard_content_main">
+                    <div class="row">
+                        <div class="column column-5">
+                            <h1 class="section_header"><i class="fa fa-plus"></i> Thêm người dùng</h1>
 
-                <form action="database/add.php" method="POST" class="appForm">
-                    <div class="appFormInputContainer">
-                        <label for="firt_Name">Họ</label>
-                        <input type="text" class="appFormInput" id="first_Name" name="first_name">
-                    </div>
-                    <div class="appFormInputContainer">
-                        <label for="last_Name">Tên</label>
-                        <input type="text" class="appFormInput" id="last_Name" name="last_name">
-                    </div>
-                    <div class="appFormInputContainer">
-                        <label for="email">Email</label>
-                        <input type="text" class="appFormInput" id="email" name="email">
-                    </div>
-                    <div class="appFormInputContainer">
-                        <label for="password">Mật Khẩu</label>
-                        <input type="password" class="appFormInput" id="password" name="password">
-                    </div>
-                    <input type="hidden" name="table" value="users">
-                    <button type="submit" class="appBtn"><i class="fa-solid fa-user-plus"></i>Add User</button>
-                </form>
-                <?php
+                            <div id="userAddFormContainer">
+                                <form action="database/add.php" method="POST" class="appForm">
+                                    <div class="appFormInputContainer">
+                                        <label for="firt_Name">Họ</label>
+                                        <input type="text" class="appFormInput" id="first_Name" name="first_name">
+                                    </div>
+                                    <div class="appFormInputContainer">
+                                        <label for="last_Name">Tên</label>
+                                        <input type="text" class="appFormInput" id="last_Name" name="last_name">
+                                    </div>
+                                    <div class="appFormInputContainer">
+                                        <label for="email">Email</label>
+                                        <input type="text" class="appFormInput" id="email" name="email">
+                                    </div>
+                                    <div class="appFormInputContainer">
+                                        <label for="password">Mật Khẩu</label>
+                                        <input type="password" class="appFormInput" id="password" name="password">
+                                    </div>
+                                    <input type="hidden" name="table" value="users">
+                                    <button type="submit" class="appBtn"><i class="fa-solid fa-user-plus"></i>Add User</button>
+                                </form>
+                                <?php
 
-                if(isset($_SESSION['response'])){ 
-                    $response_message = $_SESSION['response']['message'];
-                    $is_success = $_SESSION['response']['success'];
-                    ?>
-                <div class="responseMessage">
-                    <p class="responseMessage <?=$is_success ? 'responseMessage_success' : 'responseMessage_error'?>"><?=$response_message?>">
-                </p>
+                                if (isset($_SESSION['response'])) {
+                                    $response_message = $_SESSION['response']['message'];
+                                    $is_success = $_SESSION['response']['success'];
+                                ?>
+                                    <div class="responseMessage">
+                                        <p class="responseMessage <?= $is_success ? 'responseMessage_success' : 'responseMessage_error' ?>"><?= htmlspecialchars($response_message) ?></p>
 
 
-                <?php unset($_SESSION['response']); }?>
-    
+                                    <?php unset($_SESSION['response']);
+                                } ?>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="column column-7">
+                            <h1 class="section_header"><i class="fa fa-list"></i> Danh sách người dùng</h1>
+                            <div class="section_content">
+                                <div class="users">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Họ</th>
+                                                <th>Tên</th>
+                                                <th>Email</th>
+                                                <th>Ngày tạo</th>
+                                                <th>Ngày cập nhật</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Tran</td>
+                                                <td>Dung</td>
+                                                <td>trandung@email.com</td>
+                                                <td>February 25, 2025 @ 5:00PM</td>
+                                                <td>February 25, 2025 @ 5:30PM</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
-    
-    </div>
-    
-    </div>
+
+
     <script src="js/script.js">
     </script>
     <script src="js/jquery/jquery-3.7.1.min.js"></script>
-<script>
+    <script>
+        function script() {
 
-    function  script(){
+            this.initialize = function() {
+                    this.registerEvents();
+                },
 
-        this.initialize = function(){
-            this.registerEvents();
-        },
+                this.registerEvents = function() {
+                    document.addEventListener('click', function(e) {
+                        targetElement = e.target;
+                        classList = targetElement.classList;
 
-        this.registerEvents = function(){
-            document.addEventListener('click', function(e){
-                targetElement = e.target;
-                classList = targetElement.classList;
-                
-                classlíst = e.target.classList;
-                if(classList.contains('deleteUser')){
-                    
-                    e.preventDefault();
-                    userId = targetElement.dataset.userid;
-                    fname = targetElement.dataset.fname;
-                    lname = targetElement.dataset.lname;
+                        classlíst = e.target.classList;
+                        if (classList.contains('deleteUser')) {
 
-                    if(window.confirm('Bạn có muốn xoá không '+ fullName +'?')){
-                        $.ajax({
-                            method: 'POST',
-                            data: {
-                                user_id: userId
-                            },
-                            url: 'database/delete-user.php'
-                        })
-                    }else{
-                        console.log('Không xoá')
-                    }
+                            e.preventDefault();
+                            userId = targetElement.dataset.userid;
+                            fname = targetElement.dataset.fname;
+                            lname = targetElement.dataset.lname;
+
+                            if (window.confirm('Bạn có muốn xoá không ' + fullName + '?')) {
+                                $.ajax({
+                                    method: 'POST',
+                                    data: {
+                                        user_id: userId
+                                    },
+                                    url: 'database/delete-user.php'
+                                })
+                            } else {
+                                console.log('Không xoá')
+                            }
+                        }
+
+                    });
                 }
-                
-            });
         }
-    }
-</script>
+    </script>
     </div>
 </body>
 
