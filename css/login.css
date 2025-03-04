@@ -695,7 +695,7 @@ ul.subMenus{
   list-style: none;
   background: #c26a80 ;
   padding: unset;
-  /* display: none; */
+  display: none;
 }
 a.subMenuLink{
   padding-top: 10px !important;
@@ -712,5 +712,11 @@ i.mainMenuIconArrow{
   float: right;
   font-size: 15px !important;
   margin-top: 7px;;
+}
+.subMenuActive{
+  font-weight: bold;
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+  background: #763a49;
 }
 
