@@ -98,4 +98,14 @@ table th {
 
 table td {
     font-size: 13px;
+    text-align: center;
+    padding: 5px;
+}
+
+p.userCount {
+    text-align: right;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 15px;
+    color: #f685a1;
 }
