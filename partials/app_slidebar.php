@@ -22,7 +22,7 @@
                 <a href="./user_add.php">
                     <i class="fas fa-user-plus"></i>
                     <span class="menuText"> User Management </span>
-                    <i class="fas fa-angle-down mainMenuIconArrow"></i>
+                    <i class="fas fa-angle-left mainMenuIconArrow"></i>
 
                 </a>
                 <ul class="subMenus">
