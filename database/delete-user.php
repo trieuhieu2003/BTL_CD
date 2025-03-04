@@ -15,7 +15,7 @@ try {
     $stmt->execute();
     $response = [
         'success' => true,
-        'message' => $first_name . ' ' . $last_name . 'Người dùng đã được xoá thành công'
+        'message' => $first_name . ' ' . $last_name . ' Người dùng đã được xoá thành công'
     ];
     echo json_encode($response);
 } catch (PDOException $e) {
