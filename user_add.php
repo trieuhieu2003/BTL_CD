@@ -1,9 +1,11 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['user']))
     header('location: login.php');
 $_SESSION['table'] = 'users';
 $user = $_SESSION['user'];
+$users = include('database/show-users.php');
 
 ?>
 
@@ -37,7 +39,7 @@ $user = $_SESSION['user'];
                             <div id="userAddFormContainer">
                                 <form action="database/add.php" method="POST" class="appForm">
                                     <div class="appFormInputContainer">
-                                        <label for="firt_Name">Họ</label>
+                                        <label for="first_Name">Họ</label>
                                         <input type="text" class="appFormInput" id="first_Name" name="first_name">
                                     </div>
                                     <div class="appFormInputContainer">
@@ -74,6 +76,7 @@ $user = $_SESSION['user'];
                             <h1 class="section_header"><i class="fa fa-list"></i> Danh sách người dùng</h1>
                             <div class="section_content">
                                 <div class="users">
+
                                     <table>
                                         <thead>
                                             <tr>
@@ -83,19 +86,32 @@ $user = $_SESSION['user'];
                                                 <th>Email</th>
                                                 <th>Ngày tạo</th>
                                                 <th>Ngày cập nhật</th>
+                                                <th>Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Tran</td>
-                                                <td>Dung</td>
-                                                <td>trandung@email.com</td>
-                                                <td>February 25, 2025 @ 5:00PM</td>
-                                                <td>February 25, 2025 @ 5:30PM</td>
-                                            </tr>
+                                            <?php
+                                            foreach ($users as $index => $user) { ?>
+                                                <tr>
+                                                    <td><?= $index + 1 ?></td>
+                                                    <td><?= $user['first_name'] ?></td>
+                                                    <td><?= $user['last_name'] ?></td>
+                                                    <td><?= $user['email'] ?></td>
+                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($user['created_at'])) ?></td>
+                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($user['updated_at'])) ?></td>
+
+                                                    <td>
+                                                        <a href=""><i class="fa fa-pencil"></i>Sửa</a>
+                                                        <a href="" class="deleteUser" data-userid="<?= $user['id'] ?>" data-fname="<?= $user['first_name'] ?>" data-lname="<?= $user['last_name'] ?>"><i class="fa fa-trash"></i>Xoá</a>
+                                                    </td>
+s
+
+                                                </tr>
+                                            <?php } ?>
+
                                         </tbody>
                                     </table>
+                                    <p class="userCount"><?= count($users) ?> Người dùng</p>
                                 </div>
                             </div>
                         </div>
@@ -123,21 +139,32 @@ $user = $_SESSION['user'];
                         targetElement = e.target;
                         classList = targetElement.classList;
 
-                        classlíst = e.target.classList;
                         if (classList.contains('deleteUser')) {
 
                             e.preventDefault();
                             userId = targetElement.dataset.userid;
                             fname = targetElement.dataset.fname;
                             lname = targetElement.dataset.lname;
+                            fullName = fname + ' ' + lname;
 
                             if (window.confirm('Bạn có muốn xoá không ' + fullName + '?')) {
                                 $.ajax({
                                     method: 'POST',
                                     data: {
-                                        user_id: userId
+                                        user_id: userId,
+                                        f_name: fname,
+                                        l_name: lname
                                     },
-                                    url: 'database/delete-user.php'
+                                    url: 'database/delete-user.php',
+                                    dataType: 'json',
+                                    success: function(response) {
+                                        if (response.success) {
+                                            alert(response.message);
+                                            window.location.reload();
+                                        } else {
+                                            alert(response.message);
+                                        }
+                                    }
                                 })
                             } else {
                                 console.log('Không xoá')
@@ -147,6 +174,8 @@ $user = $_SESSION['user'];
                     });
                 }
         }
+        var myScript = new script();
+        myScript.initialize();
     </script>
     </div>
 </body>
