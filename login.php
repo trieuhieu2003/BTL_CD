@@ -1,7 +1,10 @@
 <?php
 // start session
 session_start();
-if (isset($_SESSION["user"]) && $_SESSION["location: dashboard.php"]);
+if (isset($_SESSION["user"]) && isset($_SESSION["location: dashboard.php"])) {
+  // Thực thi hành động nếu điều kiện đúng
+}
+
 
 $error_message = '';
 
