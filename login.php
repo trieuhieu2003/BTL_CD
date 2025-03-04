@@ -1,7 +1,10 @@
 <?php
 // start session
 session_start();
-if (isset($_SESSION["user"]) && $_SESSION["location: dashboard.php"]);
+if (isset($_SESSION["user"]) && isset($_SESSION["location: dashboard.php"])) {
+  // Thực thi hành động nếu điều kiện đúng
+}
+
 
 $error_message = '';
 
@@ -39,7 +42,7 @@ if ($_POST) {
 
 <body id="loginBody">
   <?php if (!empty($error_message)){ ?>
-    <div id="error_message">
+    <div id="errorMessage">
       <strong>Error:</strong>
       </p><?= $error_message ?></p>
     </div>
