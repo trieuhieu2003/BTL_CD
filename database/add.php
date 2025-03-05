@@ -1,38 +1,69 @@
 <?php
-session_start();
-$table_name = $_SESSION['table'];
 
-$first_name = $_POST['first_name'];
-$last_name = $_POST['last_name'];
-$email = $_POST['email'];
-$password = $_POST['password'];
-$created_at = date('Y-m-d H:i:s');
-$updated_at = date('Y-m-d H:i:s');
-$encrypted = password_hash($password, PASSWORD_DEFAULT);
+// Bắt đầu phiên làm việc.
+session_start();
+
+// Lấy dữ liệu ánh xạ cột của bảng.
+include('table_columns.php');
+
+// Lấy tên bảng từ session.
+$table_name = $_SESSION['table'];
+$columns = $table_columns_mapping[$table_name];
+
+// Duyệt qua các cột trong bảng.
+$db_arr = [];
+$user = $_SESSION['user'];
+
+foreach ($columns as $column) {
+    if (in_array($column, ['created_at', 'updated_at'])) {
+        // Nếu là cột 'created_at' hoặc 'updated_at' thì gán giá trị ngày giờ hiện tại.
+        $value = date('Y-m-d H:i:s');
+    } else if ($column == 'created_by') {
+        // Nếu là cột 'created_by' thì gán ID của người dùng hiện tại.
+        $value = $user['id'];
+    } else if ($column == 'password') {
+        // Nếu là cột 'password' thì mã hóa mật khẩu trước khi lưu.
+        $value = password_hash($_POST[$column], PASSWORD_DEFAULT);
+    } else {
+        // Nếu là các cột khác thì lấy giá trị từ dữ liệu POST.
+        $value = isset($_POST[$column]) ? $_POST[$column] : '';
+    }
+
+    // Thêm giá trị vào mảng dữ liệu cần lưu vào database.
+    $db_arr[$column] = $value;
+}
+
+// Tạo chuỗi danh sách các cột của bảng.
+$table_properties = implode(", ", array_keys($db_arr));
+// Tạo danh sách các placeholder tương ứng để sử dụng trong truy vấn SQL.
+$table_placeholders = ':' . implode(", :", array_keys($db_arr));
+
 try {
+    // Tạo truy vấn SQL để chèn dữ liệu vào bảng
+    $sql = "INSERT INTO 
+                $table_name($table_properties)
+            VALUES 
+                ($table_placeholders)";
+
+    // Kết nối đến cơ sở dữ liệu
     include('connection.php');
 
-    $insert_method = "INSERT INTO `$table_name` (first_name, last_name, email, password, created_at, updated_at) 
-                        VALUES (:first_name, :last_name, :email, :password, :created_at, :updated_at)";
+    // Chuẩn bị và thực thi truy vấn
+    $stmt = $conn->prepare($sql);
+    $stmt->execute($db_arr);
 
-    $stmt = $conn->prepare($insert_method);
-    $stmt->bindParam(':first_name', $first_name);
-    $stmt->bindParam(':last_name', $last_name);
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':password', $encrypted);
-    $stmt->bindParam(':created_at', $created_at);
-    $stmt->bindParam(':updated_at', $updated_at);
-
-    $stmt->execute();
+    // Trả về phản hồi thành công
     $response = [
         'success' => true,
-        'message' => $first_name . ' ' . $last_name . ' đã được thêm thành công'
+        'message' => 'Thêm thành công vào hệ thống.'
     ];
 } catch (PDOException $e) {
-    echo  $response = [
+    // Trả về phản hồi lỗi nếu có lỗi xảy ra
+    $response = [
         'success' => false,
         'message' => $e->getMessage()
     ];
 }
+
 $_SESSION['response'] = $response;
-header('location: ../user_add.php');
+header('location: ../' . $_SESSION['redirect_to']);

@@ -663,7 +663,8 @@ div.dashboard_content_main {
   background: #fff;
   min-height: 800px;
   height: 100%;
-
+  border: 1px solid green;
+  padding-left:30px ;
 }
 
 div#errorMessage {
@@ -695,7 +696,7 @@ ul.subMenus{
   list-style: none;
   background: #c26a80 ;
   padding: unset;
-  /* display: none; */
+  display: none;
 }
 a.subMenuLink{
   padding-top: 10px !important;
@@ -713,4 +714,16 @@ i.mainMenuIconArrow{
   font-size: 15px !important;
   margin-top: 7px;;
 }
+.subMenuActive{
+  font-weight: bold;
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+  background: #763a49;
+}
 
+.productTextAreaInput{
+  width: 100%;
+  height: 75px;
+  border-radius: 5px;
+  border-color: #d7d7d7;
+}
