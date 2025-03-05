@@ -3,10 +3,11 @@
 session_start();
 if (!isset($_SESSION['user'])) header('location: login.php');
 
-$_SESSION['table'] = 'products';
-$_SESSION['redirect_to'] = 'product-add.php';
+$_SESSION['table'] = 'users';
+$_SESSION['redirect_to'] = 'user_add.php';
 
 $user = $_SESSION['user'];
+$users = include('database/show-users.php');
 ?>
 
 
@@ -16,7 +17,7 @@ $user = $_SESSION['user'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Add Product - He Thong Quan Ly Kho</title>
+    <title>Dashboard - He Thong Quan Ly Kho</title>
 
     <link rel="stylesheet" href="css/user_add.css">
     <link rel="stylesheet" href="css/login.css">
@@ -36,24 +37,29 @@ $user = $_SESSION['user'];
                 <div class="dashboard_content_main">
                     <div class="row">
                         <div class="column column-12">
-                            <h1 class="section_header"><i class="fa fa-plus"></i> Thêm sản phẩm</h1>
+                            <h1 class="section_header"><i class="fa fa-plus"></i> Thêm người dùng</h1>
 
                             <div id="userAddFormContainer">
                                 <form action="database/add.php" method="POST" class="appForm">
                                     <div class="appFormInputContainer">
-                                        <label for="product_name">Tên sản phẩm</label>
-                                        <input type="text" class="appFormInput" id="product_name" placeholder="Nhập tên sản phẩm..." name="product_name">
+                                        <label for="first_Name">Họ</label>
+                                        <input type="text" class="appFormInput" id="first_Name" name="first_name">
                                     </div>
                                     <div class="appFormInputContainer">
-                                        <label for="description">Mô tả</label>
-                                        <textarea class="appFormInput productTextAreaInput" placeholder="Mô tả sản phẩm..." name="description" id="description">
-
-                                        </textarea>
+                                        <label for="last_Name">Tên</label>
+                                        <input type="text" class="appFormInput" id="last_Name" name="last_name">
                                     </div>
-
-
-                                    <button type="submit" class="appBtn"><i class="fa-solid fa-user-plus"></i>Thêm sản
-                                        phẩm</button>
+                                    <div class="appFormInputContainer">
+                                        <label for="email">Email</label>
+                                        <input type="text" class="appFormInput" id="email" name="email">
+                                    </div>
+                                    <div class="appFormInputContainer">
+                                        <label for="password">Mật Khẩu</label>
+                                        <input type="password" class="appFormInput" id="password" name="password">
+                                    </div>
+                                    <input type="hidden" name="table" value="users">
+                                    <button type="submit" class="appBtn"><i class="fa-solid fa-user-plus"></i>Add
+                                        User</button>
                                 </form>
                                 <?php
 
@@ -64,8 +70,7 @@ $user = $_SESSION['user'];
                                     <div class="responseMessage">
                                         <p
                                             class="responseMessage <?= $is_success ? 'responseMessage_success' : 'responseMessage_error' ?>">
-                                            <?= htmlspecialchars($response_message) ?>
-                                        </p>
+                                            <?= htmlspecialchars($response_message) ?></p>
 
 
                                         <?php unset($_SESSION['response']);
