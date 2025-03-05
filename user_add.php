@@ -66,16 +66,16 @@ $users = include('database/show-users.php');
                                 if (isset($_SESSION['response'])) {
                                     $response_message = $_SESSION['response']['message'];
                                     $is_success = $_SESSION['response']['success'];
-                                    ?>
+                                ?>
                                     <div class="responseMessage">
                                         <p
                                             class="responseMessage <?= $is_success ? 'responseMessage_success' : 'responseMessage_error' ?>">
                                             <?= htmlspecialchars($response_message) ?></p>
 
 
-                                        <?php unset($_SESSION['response']);
+                                    <?php unset($_SESSION['response']);
                                 } ?>
-                                </div>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -85,142 +85,8 @@ $users = include('database/show-users.php');
 
     </div>
     <script src="js/script.js">
-        </script>
-
-<<<<<<< HEAD
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.js" integrity="sha512-AZ+KX5NScHcQKWBfRXlCtb+ckjKYLO1i10faHLPXtGacz34rhXU8KM4t77XXG/Oy9961AeLqB/5o0KTJfy2WiA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        function script() {
-
-            this.initialize = function() {
-                    this.registerEvents();
-                },
-
-                this.registerEvents = function() {
-                    document.addEventListener('click', function(e) {
-                        targetElement = e.target;
-                        classList = targetElement.classList;
-
-                        if (classList.contains('deleteUser')) {
-
-                            e.preventDefault();
-                            userId = targetElement.dataset.userid;
-                            fname = targetElement.dataset.fname;
-                            lname = targetElement.dataset.lname;
-                            fullName = fname + ' ' + lname;
-
-                            BootstrapDialog.confirm({
-                                title: 'Xoá người dùng',
-                                message: 'Bạn có muốn xoá ' + fullName + ' không?',
-                                callback: function(isDelete) {
-                                    if (isDelete) {
-                                        $.ajax({
-                                            method: 'POST',
-                                            data: {
-                                                user_id: userId,
-                                                f_name: fname,
-                                                l_name: lname
-                                            },
-                                            url: 'database/delete-user.php',
-                                            dataType: 'json',
-                                            success: function(data) {
-                                                if (data.success) {
-                                                    BootstrapDialog.alert({
-                                                        title: 'Thông báo',
-                                                        type: BootstrapDialog.TYPE_SUCCESS,
-                                                        message: data.message,
-                                                        callback: function() {
-                                                            location.reload();
-                                                        }
-                                                    });
-                                                } else
-                                                    BootstrapDialog.alert({
-                                                        title: 'Thông báo',
-                                                        type: BootstrapDialog.TYPE_DANGER,
-                                                        message: data.message,
-
-                                                    });
-                                            }
-                                        })
-                                    }
-                                }
-                            });
-
-
-                        }
-
-                        if (classList.contains('updateUser')) {
-                            e.preventDefault();
-
-                            // lấy dữ liệu 
-                            firstName = targetElement.parentElement.parentElement.querySelector('td.firstName').innerHTML;
-                            lastName = targetElement.parentElement.parentElement.querySelector('td.LastName').innerHTML;
-                            email = targetElement.parentElement.parentElement.querySelector('td.email').innerHTML;
-                            userId = targetElement.dataset.userid;
-
-                            BootstrapDialog.confirm({
-                                title: 'Cập nhật người dùng ' + firstName + ' ' + lastName,
-                                message: '<form>\
-                                <div class="form-group">\
-                                    <label for="first_Name">Họ:</label>\
-                                    <input type="text" class="form-control" id="firstName" name="first_name" value="' + firstName + '">\</div>\
-                                <div class="form-group">\ <label for="last_Name">Tên:</label>\
-                                    <input type="text" class="form-control" id="lastName" name="last_name" value="' + lastName + '">\</div>\
-                                <div class="form-group">\ <label for="email">Email:</label>\
-                                    <input type="text" class="form-control" id="emailUpdate" name="email" value="' + email + '">\</div>\
-                                </form>',
-                                callback: function(isUpdate) {
-
-                                    if (isUpdate) {
-                                        $.ajax({
-                                            method: 'POST',
-                                            data: {
-                                                userId: userId,
-                                                f_name: document.getElementById('firstName').value,
-                                                l_name: document.getElementById('lastName').value,
-                                                email: document.getElementById('emailUpdate').value
-                                            },
-                                            url: 'database/update-user.php',
-                                            dataType: 'json',
-                                            success: function(data) {
-                                                if (data.success) {
-                                                    BootstrapDialog.alert({
-                                                        title: 'Thông báo',
-                                                        type: BootstrapDialog.TYPE_SUCCESS,
-                                                        message: data.message,
-                                                        callback: function() {
-                                                            location.reload();
-                                                        }
-                                                    });
-                                                } else
-                                                    BootstrapDialog.alert({
-                                                        title: 'Thông báo',
-                                                        type: BootstrapDialog.TYPE_DANGER,
-                                                        message: data.message,
-
-                                                    });
-                                            }
-                                        })
-                                    }
-                                }
-
-                            });
-                        }
-                    });
-                }
-        }
-        var myScript = new script();
-        myScript.initialize();
     </script>
-=======
->>>>>>> bda127a0334b99a0d7f35ee59b066da996f72f4c
+
     </div>
 </body>
 
