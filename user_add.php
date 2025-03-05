@@ -161,26 +161,44 @@ $users = include('database/show-users.php');
                             lname = targetElement.dataset.lname;
                             fullName = fname + ' ' + lname;
 
-                            if (window.confirm('Bạn có muốn xoá ' + fullName + ' không?')) {
-                                $.ajax({
-                                    method: 'POST',
-                                    data: {
-                                        user_id: userId,
-                                        f_name: fname,
-                                        l_name: lname
-                                    },
-                                    url: 'database/delete-user.php',
-                                    dataType: 'json',
-                                    success: function(data) {
-                                        if (data.success) {
-                                            if (window.confirm(data.message)) {
-                                                location.reload();
-                                            }
-                                        } else window.alert(data.message);
-                                    }
-                                })
+                            BootstrapDialog.confirm({
+                                title: 'Xoá người dùng',
+                                message: 'Bạn có muốn xoá ' + fullName + ' không?',
+                                callback: function(isDelete) {
+                                    if (isDelete) {
+                                        $.ajax({
+                                            method: 'POST',
+                                            data: {
+                                                user_id: userId,
+                                                f_name: fname,
+                                                l_name: lname
+                                            },
+                                            url: 'database/delete-user.php',
+                                            dataType: 'json',
+                                            success: function(data) {
+                                                if (data.success) {
+                                                    BootstrapDialog.alert({
+                                                        title: 'Thông báo',
+                                                        type: BootstrapDialog.TYPE_SUCCESS,
+                                                        message: data.message,
+                                                        callback: function() {
+                                                            location.reload();
+                                                        }
+                                                    });
+                                                } else
+                                                    BootstrapDialog.alert({
+                                                        title: 'Thông báo',
+                                                        type: BootstrapDialog.TYPE_DANGER,
+                                                        message: data.message,
 
-                            }
+                                                    });
+                                            }
+                                        })
+                                    }
+                                }
+                            });
+
+
                         }
 
                         if (classList.contains('updateUser')) {
