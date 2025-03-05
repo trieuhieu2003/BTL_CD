@@ -84,6 +84,8 @@ $users = include('database/show-users.php');
         </div>
 
     </div>
+    <script src="js/script.js">
+        </script>
 
     </div>
 </body>

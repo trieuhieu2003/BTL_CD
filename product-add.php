@@ -79,6 +79,8 @@ $user = $_SESSION['user'];
         </div>
 
     </div>
+    <script src="js/script.js">
+        </script>
 
     </div>
 </body>
