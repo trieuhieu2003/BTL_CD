@@ -25,27 +25,36 @@ foreach ($columns as $column) {
         // Nếu là cột 'password' thì mã hóa mật khẩu trước khi lưu.
         $value = password_hash($_POST[$column], PASSWORD_DEFAULT);
     } else if ($column == 'img') {
+        // Nếu là cột 'img' thì xử lý file hình ảnh.
         $target_dir = "../uploads/products/";
-        $file_data = $_FILES[$column];
+        $file_data = $_FILES[$column];  // Giữ nguyên mảng file_data
 
-        $file_name = $file_data["name"];
-        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
-        $file_data = 'product-' . time() . '.' . $file_ext;
+        $file_name = $file_data["name"];  // Lấy tên file từ mảng
+        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);  // Lấy phần mở rộng của file
 
-        $check = getimagesize($file_data['name']);
+        $new_file_name = 'product-' . time() . '.' . $file_ext;  // Tạo tên mới cho file
+
+        $check = getimagesize($file_data['tmp_name']);  // Kiểm tra xem file có phải là hình ảnh không
 
         if ($check) {
-            if (move_uploaded_file($file_data['tmp_name'], $target_dir . $file_name)) {
-                $value = $file_name;
+            if (move_uploaded_file($file_data['tmp_name'], $target_dir . $new_file_name)) {
+                $value = $new_file_name;  // Gán tên file mới
+            } else {
+                $value = '';  // Nếu không upload được file
             }
         } else {
-
+            // Nếu file không phải là hình ảnh
+            $value = '';
         }
-    } else
+    } else {
+        // Nếu không phải các cột đặc biệt, lấy giá trị từ POST
         $value = isset($_POST[$column]) ? $_POST[$column] : '';
+    }
 
+    // Gán giá trị cho mảng db_arr
     $db_arr[$column] = $value;
 }
+
 // Tạo chuỗi danh sách các cột của bảng.
 $table_properties = implode(", ", array_keys($db_arr));
 // Tạo danh sách các placeholder tương ứng để sử dụng trong truy vấn SQL.
@@ -80,3 +89,5 @@ try {
 
 $_SESSION['response'] = $response;
 header('location: ../' . $_SESSION['redirect_to']);
+
+?>
