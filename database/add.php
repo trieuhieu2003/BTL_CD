@@ -24,15 +24,28 @@ foreach ($columns as $column) {
     } else if ($column == 'password') {
         // Nếu là cột 'password' thì mã hóa mật khẩu trước khi lưu.
         $value = password_hash($_POST[$column], PASSWORD_DEFAULT);
-    } else {
-        // Nếu là các cột khác thì lấy giá trị từ dữ liệu POST.
-        $value = isset($_POST[$column]) ? $_POST[$column] : '';
-    }
+    } else if ($column == 'img') {
+        $target_dir = "../uploads/products/";
+        $file_data = $_FILES[$column];
 
-    // Thêm giá trị vào mảng dữ liệu cần lưu vào database.
+        $file_name = $file_data["name"];
+        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
+        $file_data = 'product-' . time() . '.' . $file_ext;
+
+        $check = getimagesize($file_data['name']);
+
+        if ($check) {
+            if (move_uploaded_file($file_data['tmp_name'], $target_dir . $file_name)) {
+                $value = $file_name;
+            }
+        } else {
+
+        }
+    } else
+        $value = isset($_POST[$column]) ? $_POST[$column] : '';
+
     $db_arr[$column] = $value;
 }
-
 // Tạo chuỗi danh sách các cột của bảng.
 $table_properties = implode(", ", array_keys($db_arr));
 // Tạo danh sách các placeholder tương ứng để sử dụng trong truy vấn SQL.

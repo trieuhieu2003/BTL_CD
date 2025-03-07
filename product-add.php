@@ -39,18 +39,22 @@ $user = $_SESSION['user'];
                             <h1 class="section_header"><i class="fa fa-plus"></i> Thêm sản phẩm</h1>
 
                             <div id="userAddFormContainer">
-                                <form action="database/add.php" method="POST" class="appForm">
+                                <form action="database/add.php" method="POST" class="appForm" enctype="multipart/form-data">
                                     <div class="appFormInputContainer">
                                         <label for="product_name">Tên sản phẩm</label>
                                         <input type="text" class="appFormInput" id="product_name" placeholder="Nhập tên sản phẩm..." name="product_name">
                                     </div>
+                                    
                                     <div class="appFormInputContainer">
                                         <label for="description">Mô tả</label>
-                                        <textarea class="appFormInput productTextAreaInput" placeholder="Mô tả sản phẩm..." name="description" id="description">
-
-                                        </textarea>
+                                        <textarea class="appFormInput productTextAreaInput" placeholder="Mô tả sản phẩm..." name="description" id="description"></textarea>
+                                        
                                     </div>
 
+                                    <div class="appFormInputContainer">
+                                        <label for="product_name">Ảnh</label>
+                                        <input type="file" name="img" />
+                                    </div>
 
                                     <button type="submit" class="appBtn"><i class="fa-solid fa-user-plus"></i>Thêm sản
                                         phẩm</button>
