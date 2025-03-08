@@ -1,6 +1,7 @@
 <?php
 // Start the session.
 session_start();
+
 if (!isset($_SESSION['user'])) header('location: login.php');
 
 $_SESSION['table'] = 'products';
@@ -60,7 +61,7 @@ $user = $_SESSION['user'];
                                 if (isset($_SESSION['response'])) {
                                     $response_message = $_SESSION['response']['message'];
                                     $is_success = $_SESSION['response']['success'];
-                                    ?>
+                                ?>
                                     <div class="responseMessage">
                                         <p
                                             class="responseMessage <?= $is_success ? 'responseMessage_success' : 'responseMessage_error' ?>">
@@ -68,9 +69,9 @@ $user = $_SESSION['user'];
                                         </p>
 
 
-                                        <?php unset($_SESSION['response']);
+                                    <?php unset($_SESSION['response']);
                                 } ?>
-                                </div>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -80,7 +81,7 @@ $user = $_SESSION['user'];
 
     </div>
     <script src="js/script.js">
-        </script>
+    </script>
 
     </div>
 </body>
