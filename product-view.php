@@ -71,9 +71,9 @@ $products = include('database/show.php');
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($products['updated_at'])) ?></td>
 
                                                     <td>
-                                                        <a href="" class="updateUser" data-userid="<?= $products['id'] ?>"><i
+                                                        <a href="" class="updateProduct" data-pid="<?= $products['id'] ?>"><i
                                                                 class="fa fa-pencil"></i>Sửa</a>
-                                                        <a href="" class="deleteUser" data-userid="<?= $products['id'] ?>"><i
+                                                        <a href="" class="deleteProduct" data-name="<?= $products['product_name'] ?>" data-pid="<?= $products['id'] ?>"><i
                                                                 class="fa fa-trash"></i>Xoá</a>
                                                     </td>
                                                 </tr>
@@ -92,6 +92,7 @@ $products = include('database/show.php');
         </div>
 
     </div>
+    
 
 
     <script src="js/script.js">
@@ -118,6 +119,60 @@ $products = include('database/show.php');
 
     <script>
     </script>
+    <script>
+    function Script() {  // Đặt tên hàm với chữ cái đầu in hoa (theo quy tắc PascalCase)
+        this.registerEvents = function () {
+
+            document.addEventListener('click', function(e) {
+                        targetElement = e.target; //target element is the element that triggered the event
+                        classList = targetElement.classList;
+
+                        
+
+                        if (classList.contains('deleteProduct')) {
+
+                            e.preventDefault();
+                            pId = targetElement.dataset.pid;
+                            pName = targetElement.dataset.name;
+
+                            
+                            
+
+                            if (window.confirm('Bạn có muốn xoá ' + pName + ' không?')) {
+                            
+                                $.ajax({
+                                    method: 'POST',
+                                    data: {
+                                        id : pId,
+                                        table : 'products'
+                                    },
+                                    url: 'database/delete.php',
+                                    dataType: 'json',
+                                    success: function(data) {
+                                        if (data.success) {
+                                            if (window.confirm(data.message)) {
+                                                location.reload();
+                                            }
+                                        } else window.alert(data.message);
+                                    }
+                                })
+
+                            }
+                        }
+
+                    
+                    });
+        }
+        
+        this.initialize = function () {
+            this.registerEvents();
+            
+        }
+    }
+
+    var myScript = new Script();  // Tạo một đối tượng từ constructor
+    myScript.initialize();  // Gọi phương thức từ đối tượng
+</script>
 </body>
 
 </html>
