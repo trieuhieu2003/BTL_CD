@@ -727,3 +727,11 @@ i.mainMenuIconArrow{
   border-radius: 5px;
   border-color: #d7d7d7;
 }
+
+/* view products */
+
+.productImages{
+  width: 100px;
+  height: 100px;
+
+}
