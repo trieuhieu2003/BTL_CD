@@ -1,3 +1,6 @@
+<?php 
+$user = $_SESSION['user'];
+?>
 <div class="dashboard_sidebar" id="dashboard_sidebar">
     <h3 class="dashboard_logo" id="dashboard_logo">IMS</h3>
     <div class="dashboard_sidebar_user">

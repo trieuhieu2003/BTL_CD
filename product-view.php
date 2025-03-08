@@ -67,8 +67,8 @@ $products = include('database/show.php');
                                                     <td class="LastName"><?= $products['product_name'] ?></td>
                                                     <td class="email"><?= $products['description'] ?></td>
                                                     <td ><?= $products['created_by'] ?></td>
-                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($user['created_at'])) ?></td>
-                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($user['updated_at'])) ?></td>
+                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($products['created_at'])) ?></td>
+                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($products['updated_at'])) ?></td>
 
                                                     <td>
                                                         <a href="" class="updateUser" data-userid="<?= $products['id'] ?>"><i
