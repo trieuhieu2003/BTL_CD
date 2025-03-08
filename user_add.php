@@ -17,7 +17,7 @@ $users = include('database/show-users.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - He Thong Quan Ly Kho</title>
+    <title> User add - He Thong Quan Ly Kho</title>
 
     <link rel="stylesheet" href="css/user_add.css">
     <link rel="stylesheet" href="css/login.css">

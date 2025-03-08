@@ -3,9 +3,10 @@ session_start();
 
 if (!isset($_SESSION['user']))
     header('location: login.php');
-$_SESSION['table'] = 'users';
-$user = $_SESSION['user'];
-$users = include('database/show-users.php');
+$_SESSION['table'] = 'products';
+
+$products = include('database/show.php');
+
 
 ?>
 
@@ -47,41 +48,40 @@ $users = include('database/show-users.php');
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Họ</th>
-                                                <th>Tên</th>
-                                                <th>Email</th>
-                                                <th>Ngày tạo</th>
+                                                <th>Ảnh</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Mô tả</th>
+                                                <th>Tạo bởi</th>
                                                 <th>Ngày cập nhật</th>
-                                                <th>Hành động</th>
+                                                <th>Hoạt động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            foreach ($users as $index => $user) { ?>
+                                            foreach ($products as $index => $products) { ?>
                                                 <tr>
                                                     <td><?= $index + 1 ?></td>
-                                                    <td class="firstName"><?= $user['first_name'] ?></td>
-                                                    <td class="LastName"><?= $user['last_name'] ?></td>
-                                                    <td class="email"><?= $user['email'] ?></td>
+                                                    <td class="firstName">
+                                                        <img class="productImages" src="uploads/products/<?= $products['img'] ?>" alt="" />
+                                                    </td>
+                                                    <td class="LastName"><?= $products['product_name'] ?></td>
+                                                    <td class="email"><?= $products['description'] ?></td>
+                                                    <td ><?= $products['created_by'] ?></td>
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($user['created_at'])) ?></td>
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($user['updated_at'])) ?></td>
 
                                                     <td>
-                                                        <a href="" class="updateUser" data-userid="<?= $user['id'] ?>"><i
+                                                        <a href="" class="updateUser" data-userid="<?= $products['id'] ?>"><i
                                                                 class="fa fa-pencil"></i>Sửa</a>
-                                                        <a href="" class="deleteUser" data-userid="<?= $user['id'] ?>"
-                                                            data-fname="<?= $user['first_name'] ?>"
-                                                            data-lname="<?= $user['last_name'] ?>"><i
+                                                        <a href="" class="deleteUser" data-userid="<?= $products['id'] ?>"><i
                                                                 class="fa fa-trash"></i>Xoá</a>
                                                     </td>
-
-
                                                 </tr>
                                             <?php } ?>
 
                                         </tbody>
                                     </table>
-                                    <p class="userCount"><?= count($users) ?> Người dùng</p>
+                                    <p class="userCount"><?= count($products) ?> Sản phẩm</p>
                                 </div>
                             </div>
                         </div>
@@ -115,112 +115,9 @@ $users = include('database/show-users.php');
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.js"
         integrity="sha512-AZ+KX5NScHcQKWBfRXlCtb+ckjKYLO1i10faHLPXtGacz34rhXU8KM4t77XXG/Oy9961AeLqB/5o0KTJfy2WiA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
-        function script() {
-
-            this.initialize = function () {
-                this.registerEvents();
-            },
-
-                this.registerEvents = function () {
-                    document.addEventListener('click', function (e) {
-                        targetElement = e.target;
-                        classList = targetElement.classList;
-
-                        if (classList.contains('deleteUser')) {
-
-                            e.preventDefault();
-                            userId = targetElement.dataset.userid;
-                            fname = targetElement.dataset.fname;
-                            lname = targetElement.dataset.lname;
-                            fullName = fname + ' ' + lname;
-
-                            if (window.confirm('Bạn có muốn xoá ' + fullName + ' không?')) {
-                                $.ajax({
-                                    method: 'POST',
-                                    data: {
-                                        user_id: userId,
-                                        f_name: fname,
-                                        l_name: lname
-                                    },
-                                    url: 'database/delete-user.php',
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        if (data.success) {
-                                            if (window.confirm(data.message)) {
-                                                location.reload();
-                                            }
-                                        } else window.alert(data.message);
-                                    }
-                                })
-
-                            }
-                        }
-
-                        if (classList.contains('updateUser')) {
-                            e.preventDefault();
-
-                            // lấy dữ liệu 
-                            firstName = targetElement.parentElement.parentElement.querySelector('td.firstName').innerHTML;
-                            lastName = targetElement.parentElement.parentElement.querySelector('td.LastName').innerHTML;
-                            email = targetElement.parentElement.parentElement.querySelector('td.email').innerHTML;
-                            userId = targetElement.dataset.userid;
-
-                            BootstrapDialog.confirm({
-                                title: 'Cập nhật người dùng ' + firstName + ' ' + lastName,
-                                message: '<form>\
-                                <div class="form-group">\
-                                    <label for="first_Name">Họ:</label>\
-                                    <input type="text" class="form-control" id="firstName" name="first_name" value="' + firstName + '">\</div>\
-                                <div class="form-group">\ <label for="last_Name">Tên:</label>\
-                                    <input type="text" class="form-control" id="lastName" name="last_name" value="' + lastName + '">\</div>\
-                                <div class="form-group">\ <label for="email">Email:</label>\
-                                    <input type="text" class="form-control" id="emailUpdate" name="email" value="' + email + '">\</div>\
-                                </form>',
-                                callback: function (isUpdate) {
-
-                                    if (isUpdate) {
-                                        $.ajax({
-                                            method: 'POST',
-                                            data: {
-                                                userId: userId,
-                                                f_name: document.getElementById('firstName').value,
-                                                l_name: document.getElementById('lastName').value,
-                                                email: document.getElementById('emailUpdate').value
-                                            },
-                                            url: 'database/update-user.php',
-                                            dataType: 'json',
-                                            success: function (data) {
-                                                if (data.success) {
-                                                    BootstrapDialog.alert({
-                                                        title: 'Thông báo',
-                                                        type: BootstrapDialog.TYPE_SUCCESS,
-                                                        message: data.message,
-                                                        callback: function () {
-                                                            location.reload();
-                                                        }
-                                                    });
-                                                } else
-                                                    BootstrapDialog.alert({
-                                                        title: 'Thông báo',
-                                                        type: BootstrapDialog.TYPE_DANGER,
-                                                        message: data.message,
-
-                                                    });
-                                            }
-                                        })
-                                    }
-                                }
-
-                            });
-                        }
-                    });
-                }
-        }
-        var myScript = new script();
-        myScript.initialize();
     </script>
-
 </body>
 
 </html>
