@@ -716,9 +716,9 @@ i.mainMenuIconArrow{
 }
 .subMenuActive{
   font-weight: bold;
-  border-top: 2px solid white;
+  /* border-top: 2px solid white;
   border-bottom: 2px solid white;
-  background: #763a49;
+  background: #763a49; */
 }
 
 .productTextAreaInput{
@@ -726,4 +726,12 @@ i.mainMenuIconArrow{
   height: 75px;
   border-radius: 5px;
   border-color: #d7d7d7;
+}
+
+/* view products */
+
+.productImages{
+  width: 100px;
+  height: 100px;
+
 }
