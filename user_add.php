@@ -67,16 +67,16 @@ $users = include('database/show.php');
                                 if (isset($_SESSION['response'])) {
                                     $response_message = $_SESSION['response']['message'];
                                     $is_success = $_SESSION['response']['success'];
-                                    ?>
+                                ?>
                                     <div class="responseMessage">
                                         <p
                                             class="responseMessage <?= $is_success ? 'responseMessage_success' : 'responseMessage_error' ?>">
                                             <?= htmlspecialchars($response_message) ?></p>
 
 
-                                        <?php unset($_SESSION['response']);
+                                    <?php unset($_SESSION['response']);
                                 } ?>
-                                </div>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -86,7 +86,7 @@ $users = include('database/show.php');
 
     </div>
     <script src="js/script.js">
-        </script>
+    </script>
 
     </div>
 </body>

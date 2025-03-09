@@ -52,6 +52,7 @@ $products = include('database/show.php');
                                                 <th>Tên sản phẩm</th>
                                                 <th>Mô tả</th>
                                                 <th>Tạo bởi</th>
+                                                <th>Ngày tạo</th>
                                                 <th>Ngày cập nhật</th>
                                                 <th>Hoạt động</th>
                                             </tr>
@@ -66,7 +67,19 @@ $products = include('database/show.php');
                                                     </td>
                                                     <td class="LastName"><?= $products['product_name'] ?></td>
                                                     <td class="email"><?= $products['description'] ?></td>
-                                                    <td ><?= $products['created_by'] ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $pid = $products['created_by'];
+                                                        $stmt = $conn->prepare("SELECT * FROM users WHERE id=$pid");
+                                                        $stmt->execute();
+                                                        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                                                        $created_by_name = $row['first_name'] . ' ' . $row['last_name'];
+                                                        echo $created_by_name;
+                                                        ?>
+
+
+                                                    </td>
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($products['created_at'])) ?></td>
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($products['updated_at'])) ?></td>
 
