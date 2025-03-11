@@ -52,29 +52,40 @@ $products = include('database/show.php');
                                                 <th>Tên sản phẩm</th>
                                                 <th>Mô tả</th>
                                                 <th>Tạo bởi</th>
+                                                <th>Ngày tạo</th>
                                                 <th>Ngày cập nhật</th>
                                                 <th>Hoạt động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            foreach ($products as $index => $products) { ?>
+                                            foreach ($products as $index => $product) { ?>
                                                 <tr>
                                                     <td><?= $index + 1 ?></td>
                                                     <td class="firstName">
-                                                        <img class="productImages" src="uploads/products/<?= $products['img'] ?>" alt="" />
+                                                        <img class="productImages" src="uploads/products/<?= $product['img'] ?>" alt="" />
                                                     </td>
-                                                    <td class="LastName"><?= $products['product_name'] ?></td>
-                                                    <td class="email"><?= $products['description'] ?></td>
-                                                    <td ><?= $products['created_by'] ?></td>
-                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($products['created_at'])) ?></td>
-                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($products['updated_at'])) ?></td>
+                                                    <td class="LastName"><?= $product['product_name'] ?></td>
+                                                    <td class="email"><?= $product['description'] ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $pid = $product['created_by'];
+                                                        $stmt = $conn->prepare("SELECT * FROM users WHERE id=$pid");
+                                                        $stmt->execute();
+                                                        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                                                        $created_by_name = $row['first_name'] . ' ' . $row['last_name'];
+                                                        echo $created_by_name;
+                                                        ?>
+
+
+                                                    </td>
+                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($product['created_at'])) ?></td>
+                                                    <td><?= date('M d,Y @ h:i:s A', strtotime($product['updated_at'])) ?></td>
 
                                                     <td>
-                                                        <a href="" class="updateProduct" data-pid="<?= $products['id'] ?>"><i
-                                                                class="fa fa-pencil"></i>Sửa</a>
-                                                        <a href="" class="deleteProduct" data-name="<?= $products['product_name'] ?>" data-pid="<?= $products['id'] ?>"><i
-                                                                class="fa fa-trash"></i>Xoá</a>
+                                                        <a href="" class="updateProduct" data-pid="<?= $product['id'] ?>" data-pid="<?= $product['description'] ?>"><i class="fa fa-pencil"></i>Sửa</a>
+                                                        <a href="" class="deleteProduct" data-name="<?= $product['product_name'] ?>" data-pid="<?= $product['id'] ?>"><i class="fa fa-trash"></i>Xoá</a>
                                                     </td>
                                                 </tr>
                                             <?php } ?>
@@ -93,6 +104,7 @@ $products = include('database/show.php');
 
     </div>
     
+
 
 
     <script src="js/script.js">
@@ -120,59 +132,146 @@ $products = include('database/show.php');
     <script>
     </script>
     <script>
-    function Script() {  // Đặt tên hàm với chữ cái đầu in hoa (theo quy tắc PascalCase)
-        this.registerEvents = function () {
+        function Script() { // Đặt tên hàm với chữ cái đầu in hoa (theo quy tắc PascalCase)
+            var vm = this; // Đặt tên biến vm (viết tắt của ViewModel)
 
-            document.addEventListener('click', function(e) {
-                        targetElement = e.target; //target element is the element that triggered the event
-                        classList = targetElement.classList;
+            this.registerEvents = function() {
 
-                        
+                document.addEventListener('click', function(e) {
+                    targetElement = e.target; //target element is the element that triggered the event
+                    classList = targetElement.classList;
 
-                        if (classList.contains('deleteProduct')) {
 
-                            e.preventDefault();
-                            pId = targetElement.dataset.pid;
-                            pName = targetElement.dataset.name;
 
-                            
-                            
+                    if (classList.contains('deleteProduct')) {
 
-                            if (window.confirm('Bạn có muốn xoá ' + pName + ' không?')) {
-                            
-                                $.ajax({
-                                    method: 'POST',
-                                    data: {
-                                        id : pId,
-                                        table : 'products'
-                                    },
-                                    url: 'database/delete.php',
-                                    dataType: 'json',
-                                    success: function(data) {
-                                        if (data.success) {
-                                            if (window.confirm(data.message)) {
-                                                location.reload();
-                                            }
-                                        } else window.alert(data.message);
-                                    }
-                                })
+                        e.preventDefault();
+                        pId = targetElement.dataset.pid;
+                        pName = targetElement.dataset.name;
+
+
+
+
+                        if (window.confirm('Bạn có muốn xoá ' + pName + ' không?')) {
+
+                            $.ajax({
+                                method: 'POST',
+                                data: {
+                                    id: pId,
+                                    table: 'products'
+                                },
+                                url: 'database/delete.php',
+                                dataType: 'json',
+                                success: function(data) {
+                                    if (data.success) {
+                                        if (window.confirm(data.message)) {
+                                            location.reload();
+                                        }
+                                    } else window.alert(data.message);
+                                }
+                            })
+
+                        }
+                    }
+
+                    if (classList.contains('updateProduct')) {
+                        e.preventDefault();
+
+                        pId = targetElement.dataset.pid;
+
+
+                        vm.showEditDialog(pId);
+
+
+
+
+                    }
+                });
+
+                document.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    targetElement = e.target; //target element is the element that triggered the event
+
+                    if (targetElement.id === 'editProductForm') {
+                        vm.saveUpdateData(targetElement);
+                    }
+
+                });
+            }
+
+            this.saveUpdateData = function(form) {
+                $.ajax({
+                    method: 'POST',
+                    data: new FormData(form),
+                    url: 'database/update-product.php',
+
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        BootstrapDialog.alert({
+                            type: data.success ? BootstrapDialog.TYPE_SUCCESS : BootstrapDialog.TYPE_DANGER,
+                            message: data.message,
+                            callback: function() {
+                                if (data.success) location.reload();
+                            }
+                        })
+                    }
+                })
+            }
+
+            this.showEditDialog = function(id) {
+
+                $.get('database/get-product.php', {
+                    id: id
+                }, function(productDetails) {
+
+                    BootstrapDialog.confirm({
+                        title: 'Cập nhật <strong> ' + productDetails.product_name + '</strong>',
+                        message: '<form action="database/add.php" method="POST" enctype="multipart/form-data" id="editProductForm">\
+                            <div class="appFormInputContainer">\
+                                        <label for="product_name">Tên sản phẩm</label>\
+                                        <input type="text" class="appFormInput" id="product_name" value="' + productDetails.product_name + '" placeholder=" Nhập tên sản phẩm..." name="product_name">\
+                                    </div>\
+                                    <div class="appFormInputContainer">\
+                                        <label for="description">Mô tả</label>\
+                                        <textarea class="appFormInput productTextAreaInput" value="" placeholder=" Mô tả sản phẩm..." name="description" id="description">' + productDetails.description + '</textarea>\
+                                    </div>\
+                                    <div class="appFormInputContainer">\
+                                        <label for="product_name">Ảnh</label>\
+                                        <input type="file" name="img" />\
+                                    </div>\
+                                    <input type="hidden" name="pid" value="' + productDetails.id + '"/>\
+                                    <input type="submit" value="submit" id="editProductSubmitBtn" class="hidden"/>\
+                                    </form>\
+                        ',
+                        callback: function(isUpdate) {
+
+                            if (isUpdate) {
+
+                                document.getElementById('editProductSubmitBtn').click();
+
+
 
                             }
                         }
 
-                    
                     });
-        }
-        
-        this.initialize = function () {
-            this.registerEvents();
-            
-        }
-    }
 
-    var myScript = new Script();  // Tạo một đối tượng từ constructor
-    myScript.initialize();  // Gọi phương thức từ đối tượng
-</script>
+                }, 'json');
+
+
+            }
+
+            this.initialize = function() {
+                this.registerEvents();
+
+            }
+        }
+
+        var myScript = new Script(); // Tạo một đối tượng từ constructor
+        myScript.initialize(); // Gọi phương thức từ đối tượng
+    </script>
 </body>
 
 </html>
