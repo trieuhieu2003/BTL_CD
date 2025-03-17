@@ -80,7 +80,7 @@ function showHideSubMenu(subMenu, mainMenuIcon) {
     }
 }
 
-// Phần xử lý để đánh dấu menu/submenu hiện tại là "active" (được chọn)
+//Phần xử lý để đánh dấu menu/submenu hiện tại là "active" (được chọn)
 let pathArray = window.location.pathname.split('/'); // Lấy đường dẫn hiện tại
 let curFile = pathArray[pathArray.length - 1]; // Lấy tên file hiện tại từ URL
 let curNav = document.querySelector('a[href="./' + curFile + '"]'); // Tìm phần tử <a> có href trùng với file hiện tại

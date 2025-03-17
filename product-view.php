@@ -3,7 +3,7 @@ session_start();
 
 if (!isset($_SESSION['user']))
     header('location: login.php');
-$_SESSION['table'] = 'products';
+$show_table = 'products';
 
 $products = include('database/show.php');
 
@@ -51,6 +51,7 @@ $products = include('database/show.php');
                                                 <th>Ảnh</th>
                                                 <th>Tên sản phẩm</th>
                                                 <th>Mô tả</th>
+                                                <th>Nhà cung cấp </th>
                                                 <th>Tạo bởi</th>
                                                 <th>Ngày tạo</th>
                                                 <th>Ngày cập nhật</th>
@@ -67,10 +68,28 @@ $products = include('database/show.php');
                                                     </td>
                                                     <td class="LastName"><?= $product['product_name'] ?></td>
                                                     <td class="email"><?= $product['description'] ?></td>
+                                                    <td class="email">
+                                                        <?php
+                                                        $supplier_list = '-';
+
+                                                        $pid = $product['id'];
+                                                        $stmt = $conn->prepare("SELECT supplier_name FROM suppliers, productsuppliers WHERE productsuppliers.product=$pid AND productsuppliers.supplier=suppliers.id");
+                                                        $stmt->execute();
+                                                        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                                        if ($row) {
+
+                                                            $supplier_arr = array_column($row, "supplier_name");
+                                                            $supplier_list = '<li>' . implode(',', $supplier_arr);
+                                                        }
+                                                        echo $supplier_list;
+
+                                                        ?>
+                                                    </td>
                                                     <td>
                                                         <?php
-                                                        $pid = $product['created_by'];
-                                                        $stmt = $conn->prepare("SELECT * FROM users WHERE id=$pid");
+                                                        $uid = $product['created_by'];
+                                                        $stmt = $conn->prepare("SELECT * FROM users WHERE id=$uid");
                                                         $stmt->execute();
                                                         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -104,7 +123,19 @@ $products = include('database/show.php');
 
     </div>
 
+    <?php
+    include('partials/app-scripts.php');
 
+    $show_table = 'suppliers';
+    $suppliers = include('database/show.php');
+
+    $supplier_arr = [];
+
+    foreach ($suppliers as $supplier) {
+        $supplier_arr[$supplier['id']] = $supplier['supplier_name'];
+    }
+    $supplier_arr = json_encode($supplier_arr);
+    ?>
 
     <script src="js/script.js">
     </script>
@@ -131,6 +162,8 @@ $products = include('database/show.php');
     <script>
     </script>
     <script>
+        var suppliersList = <?= $supplier_arr ?>;
+
         function Script() { // Đặt tên hàm với chữ cái đầu in hoa (theo quy tắc PascalCase)
             var vm = this; // Đặt tên biến vm (viết tắt của ViewModel)
 
@@ -224,6 +257,13 @@ $products = include('database/show.php');
                 $.get('database/get-product.php', {
                     id: id
                 }, function(productDetails) {
+                    let curSuppliers = productDetails['suppliers'];
+                    let supplierOption = '';
+
+                    for (const [supId, supName] of Object.entries(suppliersList)) {
+                        selected = curSuppliers.indexOf(supId) > -1 ? 'selected' : '';
+                        supplierOption += "<option " + selected + " value='" + supId + "'>" + supName + "</option>";
+                    }
 
                     BootstrapDialog.confirm({
                         title: 'Cập nhật <strong> ' + productDetails.product_name + '</strong>',
@@ -231,6 +271,13 @@ $products = include('database/show.php');
                             <div class="appFormInputContainer">\
                                         <label for="product_name">Tên sản phẩm</label>\
                                         <input type="text" class="appFormInput" id="product_name" value="' + productDetails.product_name + '" placeholder=" Nhập tên sản phẩm..." name="product_name">\
+                                    </div>\
+                                    <div class="appFormInputContainer">\
+                                        <label for="description">Nhà cung cấp</label>\
+                                        <select name="suppliers[]" id="suppliersSelect" multiple="">\
+                                            <option value="">Chọn nhà cung cấp</option>\
+                                            ' + supplierOption + '\
+                                        </select>\
                                     </div>\
                                     <div class="appFormInputContainer">\
                                         <label for="description">Mô tả</label>\

@@ -29,22 +29,23 @@ foreach ($columns as $column) {
         $target_dir = "../uploads/products/";
         $file_data = $_FILES[$column];  // Giữ nguyên mảng file_data
 
-        $file_name = $file_data["name"];  // Lấy tên file từ mảng
-        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);  // Lấy phần mở rộng của file
+        $value = NULL;
+        $file_data = $_FILES['img'];  // Giữ nguyên mảng file_data
 
-        $new_file_name = 'product-' . time() . '.' . $file_ext;  // Tạo tên mới cho file
+        if ($file_data['tmp_name'] !== '') {
+            $file_name = $file_data["name"];  // Lấy tên file từ mảng
+            $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);  // Lấy phần mở rộng của file
 
-        $check = getimagesize($file_data['tmp_name']);  // Kiểm tra xem file có phải là hình ảnh không
+            $new_file_name = 'product-' . time() . '.' . $file_ext;  // Tạo tên mới cho file
 
-        if ($check) {
-            if (move_uploaded_file($file_data['tmp_name'], $target_dir . $new_file_name)) {
-                $value = $new_file_name;  // Gán tên file mới
-            } else {
-                $value = '';  // Nếu không upload được file
+            $check = getimagesize($file_data['tmp_name']);  // Kiểm tra xem file có phải là hình ảnh không
+
+
+            if ($check) {
+                if (move_uploaded_file($file_data['tmp_name'], $target_dir . $new_file_name)) {
+                    $value = $file_name;  // Gán tên file mới
+                }
             }
-        } else {
-            // Nếu file không phải là hình ảnh
-            $value = '';
         }
     } else {
         // Nếu không phải các cột đặc biệt, lấy giá trị từ POST
@@ -60,6 +61,7 @@ $table_properties = implode(", ", array_keys($db_arr));
 // Tạo danh sách các placeholder tương ứng để sử dụng trong truy vấn SQL.
 $table_placeholders = ':' . implode(", :", array_keys($db_arr));
 
+// ghi vào bảng chính
 try {
     // Tạo truy vấn SQL để chèn dữ liệu vào bảng
     $sql = "INSERT INTO 
@@ -73,6 +75,31 @@ try {
     // Chuẩn bị và thực thi truy vấn
     $stmt = $conn->prepare($sql);
     $stmt->execute($db_arr);
+
+    // Lay id cua co so du lieu
+    $product_id = $conn->lastInsertId();
+
+    // thêm nhà cung cấp
+    if ($table_name === 'products') {
+        $suppliers = isset($_POST['suppliers']) ? $_POST['suppliers'] : [];
+        if ($suppliers) {
+
+            foreach ($suppliers as $supplier) {
+                $supplier_data = [
+                    'supplier_id' => $supplier,
+                    'product_id' => $product_id,
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'created_at' => date('Y-m-d H:i:s')
+                ];
+
+                $sql = "INSERT INTO productsuppliers (supplier, product, updated_at, created_at) VALUES (:supplier_id, :product_id, :updated_at, :created_at)";
+
+                // Chuẩn bị và thực thi truy vấn
+                $stmt = $conn->prepare($sql);
+                $stmt->execute($supplier_data);
+            }
+        }
+    }
 
     // Trả về phản hồi thành công
     $response = [
@@ -89,5 +116,3 @@ try {
 
 $_SESSION['response'] = $response;
 header('location: ../' . $_SESSION['redirect_to']);
-
-?>
