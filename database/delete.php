@@ -5,6 +5,14 @@ $table = $data['table'];
 
 try {
     include('connection.php');
+    //xoá nhà cung cấp
+    if ($table === 'suppliers') {
+        $delete_method = "DELETE FROM $table WHERE id = :id";
+        $stmt = $conn->prepare($delete_method);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
 
     $delete_method = "DELETE FROM $table WHERE id = :id";
     $stmt = $conn->prepare($delete_method);

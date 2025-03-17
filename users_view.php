@@ -4,8 +4,9 @@ session_start();
 if (!isset($_SESSION['user']))
     header('location: login.php');
 $_SESSION['table'] = 'users';
+$user = $_SESSION['user'];
 
-$_SESSION['table'] = 'users';
+$show_table = 'users';
 
 $users = include('database/show.php');
 
