@@ -1,121 +1,93 @@
 <?php
-session_start();
-include('table_columns.php'); // File chứa mảng $table_columns_mapping định nghĩa các cột của từng bảng
-include('connection.php');    // File chứa kết nối PDO đến cơ sở dữ liệu
 
-// Lấy thông tin bảng và người dùng từ session
+// Bắt đầu phiên làm việc.
+session_start();
+
+// Lấy dữ liệu ánh xạ cột của bảng.
+include('table_columns.php');
+
+// Lấy tên bảng từ session.
 $table_name = $_SESSION['table'];
 $columns = $table_columns_mapping[$table_name];
+
+// Duyệt qua các cột trong bảng.  
+$db_arr = [];
 $user = $_SESSION['user'];
 
-if (empty($_POST['product_name'])) {
-    $_SESSION['response'] = [
-        'success' => false,
-        'message' => 'Tên sản phẩm không được để trống!'
-    ];
-    header('location: ../' . $_SESSION['redirect_to']);
-    exit();
-}
 
-// Kiểm tra dữ liệu đầu vào dựa trên bảng
-if ($table_name == 'users') {
-    $first_name = isset($_POST['first_name']) ? trim($_POST['first_name']) : '';
-    $last_name = isset($_POST['last_name']) ? trim($_POST['last_name']) : '';
 
-    // Kiểm tra trường bắt buộc
-    if (empty($first_name) || empty($last_name)) {
-        $_SESSION['response'] = [
-            'success' => false,
-            'message' => 'Vui lòng nhập tên người dùng.'
-        ];
-        header('location: ../' . $_SESSION['redirect_to']);
-        exit();
-    }
-
-    // Kiểm tra trùng lặp người dùng
-    $check_sql = "SELECT COUNT(*) FROM $table_name WHERE first_name = :first_name AND last_name = :last_name";
-    $check_stmt = $conn->prepare($check_sql);
-    $check_stmt->execute(['first_name' => $first_name, 'last_name' => $last_name]);
-    $user_exists = $check_stmt->fetchColumn();
-
-    if ($user_exists) {
-        $_SESSION['response'] = [
-            'success' => false,
-            'message' => 'Tên người dùng đã tồn tại. Vui lòng chọn tên khác.'
-        ];
-        header('location: ../' . $_SESSION['redirect_to']);
-        exit();
-    }
-} elseif ($table_name == 'products') {
-    // Kiểm tra trường bắt buộc
-    if (empty($_POST['product_name'])) {
-        $_SESSION['response'] = [
-            'success' => false,
-            'message' => 'Vui lòng nhập tên sản phẩm.'
-        ];
-        header('location: ../' . $_SESSION['redirect_to']);
-        exit();
-    }
-    
-}
-
-// Chuẩn bị dữ liệu để chèn vào cơ sở dữ liệu
-$db_arr = [];
 foreach ($columns as $column) {
-    if ($table_name == 'products' && $column == 'image') {
-        // Xử lý tải lên hình ảnh cho sản phẩm
-        if (isset($_FILES['img']) && $_FILES['img']['error'] == UPLOAD_ERR_OK) {
-            $upload_dir = 'uploads/';
-            if (!file_exists($upload_dir)) {
-                mkdir($upload_dir, 0777, true);
-            }
-            $file_name = basename($_FILES['img']['name']);
-            $target_file = $upload_dir . $file_name;
-            if (move_uploaded_file($_FILES['img']['tmp_name'], $target_file)) {
-                $value = $file_name;
+    if (in_array($column, ['created_at', 'updated_at'])) {
+        // Nếu là cột 'created_at' hoặc 'updated_at' thì gán giá trị ngày giờ hiện tại.
+        $value = date('Y-m-d H:i:s');
+    } else if ($column == 'created_by') {
+        // Nếu là cột 'created_by' thì gán ID của người dùng hiện tại.
+        $value = $user['id'];
+    } else if ($column == 'password') {
+        // Nếu là cột 'password' thì mã hóa mật khẩu trước khi lưu.
+        $value = password_hash($_POST[$column], PASSWORD_DEFAULT);
+    } else if ($column == 'img') {
+        // Nếu là cột 'img' thì xử lý file hình ảnh.
+        $target_dir = "../uploads/products/";
+        $file_data = $_FILES[$column];  // Giữ nguyên mảng file_data
+
+        $file_name = $file_data["name"];  // Lấy tên file từ mảng
+        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);  // Lấy phần mở rộng của file
+
+        $new_file_name = 'product-' . time() . '.' . $file_ext;  // Tạo tên mới cho file
+
+        $check = getimagesize($file_data['tmp_name']);  // Kiểm tra xem file có phải là hình ảnh không
+
+        if ($check) {
+            if (move_uploaded_file($file_data['tmp_name'], $target_dir . $new_file_name)) {
+                $value = $new_file_name;  // Gán tên file mới
             } else {
-                $value = '';
+                $value = '';  // Nếu không upload được file
             }
         } else {
+            // Nếu file không phải là hình ảnh
             $value = '';
         }
-    } elseif (in_array($column, ['created_at', 'updated_at'])) {
-        // Gán thời gian hiện tại
-        $value = date('Y-m-d H:i:s');
-    } elseif ($column == 'created_by') {
-        // Gán ID của người tạo
-        $value = $user['id'];
-    } elseif ($column == 'password' && $table_name == 'users') {
-        // Mã hóa mật khẩu cho bảng users
-        $value = password_hash($_POST[$column], PASSWORD_DEFAULT);
     } else {
-        // Lấy giá trị từ form hoặc để trống nếu không có
+        // Nếu không phải các cột đặc biệt, lấy giá trị từ POST
         $value = isset($_POST[$column]) ? $_POST[$column] : '';
     }
+
+    // Gán giá trị cho mảng db_arr
     $db_arr[$column] = $value;
 }
 
-// Tạo truy vấn SQL
+// Tạo chuỗi danh sách các cột của bảng.
 $table_properties = implode(", ", array_keys($db_arr));
+// Tạo danh sách các placeholder tương ứng để sử dụng trong truy vấn SQL.
 $table_placeholders = ':' . implode(", :", array_keys($db_arr));
 
 try {
-    // Thực thi truy vấn chèn dữ liệu
-    $sql = "INSERT INTO $table_name ($table_properties) VALUES ($table_placeholders)";
+    // Tạo truy vấn SQL để chèn dữ liệu vào bảng
+    $sql = "INSERT INTO 
+                $table_name($table_properties)
+            VALUES 
+                ($table_placeholders)";
+
+    // Kết nối đến cơ sở dữ liệu
+    include('connection.php');
+
+    // Chuẩn bị và thực thi truy vấn
     $stmt = $conn->prepare($sql);
     $stmt->execute($db_arr);
-    $_SESSION['response'] = [
+
+    // Trả về phản hồi thành công
+    $response = [
         'success' => true,
         'message' => 'Thêm thành công vào hệ thống.'
     ];
 } catch (PDOException $e) {
-    // Xử lý lỗi nếu có
-    $_SESSION['response'] = [
+    // Trả về phản hồi lỗi nếu có lỗi xảy ra
+    $response = [
         'success' => false,
-        'message' => 'Lỗi: ' . $e->getMessage()
+        'message' => $e->getMessage()
     ];
 }
 
-// Chuyển hướng người dùng về trang trước đó
+$_SESSION['response'] = $response;
 header('location: ../' . $_SESSION['redirect_to']);
-exit();
