@@ -6,7 +6,7 @@ if (!isset($_SESSION['user'])) header('location: login.php');
 $_SESSION['table'] = 'users';
 $_SESSION['redirect_to'] = 'user_add.php';
 
-$_SESSION['table'] = 'users';
+$show_table = 'users';
 
 $users = include('database/show.php');
 ?>

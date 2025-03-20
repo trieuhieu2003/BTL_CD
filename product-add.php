@@ -1,7 +1,6 @@
 <?php
 // Start the session.
 session_start();
-
 if (!isset($_SESSION['user'])) header('location: login.php');
 
 $_SESSION['table'] = 'products';
@@ -21,6 +20,7 @@ $user = $_SESSION['user'];
 
     <link rel="stylesheet" href="css/user_add.css">
     <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/product-add.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/css/bootstrap-dialog.min.css"
@@ -45,11 +45,30 @@ $user = $_SESSION['user'];
                                         <label for="product_name">Tên sản phẩm</label>
                                         <input type="text" class="appFormInput" id="product_name" placeholder="Nhập tên sản phẩm..." name="product_name">
                                     </div>
-                                    
+
                                     <div class="appFormInputContainer">
                                         <label for="description">Mô tả</label>
                                         <textarea class="appFormInput productTextAreaInput" placeholder="Mô tả sản phẩm..." name="description" id="description"></textarea>
-                                        
+
+                                    </div>
+
+                                    <div class="appFormInputContainer">
+                                        <label for="description">Nhà cung cấp</label>
+                                        <select name="suppliers[]" id="suppliersSelect" multiple="">
+                                            <option value="">Chọn nhà cung cấp</option>
+                                            <?php
+
+                                            $show_table = 'suppliers';
+                                            $suppliers = include('database/show.php');
+
+                                            foreach ($suppliers as $supplier) {
+                                                echo "<option value='" . $supplier['id'] . "'>" . $supplier['supplier_name'] . "</option>";
+                                            }
+
+                                            ?>
+
+                                        </select>
+
                                     </div>
 
                                     <div class="appFormInputContainer">

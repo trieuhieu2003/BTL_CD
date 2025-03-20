@@ -10,9 +10,11 @@ include('table_columns.php');
 $table_name = $_SESSION['table'];
 $columns = $table_columns_mapping[$table_name];
 
-// Duyệt qua các cột trong bảng.
+// Duyệt qua các cột trong bảng.  
 $db_arr = [];
 $user = $_SESSION['user'];
+
+
 
 foreach ($columns as $column) {
     if (in_array($column, ['created_at', 'updated_at'])) {
@@ -89,5 +91,3 @@ try {
 
 $_SESSION['response'] = $response;
 header('location: ../' . $_SESSION['redirect_to']);
-
-?>

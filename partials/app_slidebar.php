@@ -1,4 +1,4 @@
-<?php 
+<?php
 $user = $_SESSION['user'];
 ?>
 <div class="dashboard_sidebar" id="dashboard_sidebar">
@@ -33,6 +33,7 @@ $user = $_SESSION['user'];
                 </a>
 
                 <ul class="subMenus" id="user">
+<<<<<<< HEAD
                     <li><a class="subMenuLink" href=""><i class="fas fa-circle"></i>Quản Lý Nhà Cung Cấp</a></li>
                     <li><a class="subMenuLink" href=""><i class="fas fa-circle"></i>Thêm Nhà Cung Cấp</a></li>
                 </ul>
@@ -47,6 +48,10 @@ $user = $_SESSION['user'];
                 <ul class="subMenus" id="user">
                     <li><a class="subMenuLink" href="./view-order.php"><i class="fas fa-circle"></i>Quản Lý Đơn Hàng</a></li>
                     <li><a class="subMenuLink" href="./product-order.php"><i class="fas fa-circle"></i>Tạo Đơn Hàng</a></li>
+=======
+                    <li><a class="subMenuLink" href="./supplier-view.php"><i class="fas fa-circle"></i>view Supplier</a></li>
+                    <li><a class="subMenuLink" href="./supplier-add.php"><i class="fas fa-circle"></i>add Supplier</a></li>
+>>>>>>> 7eb623cd54bb1ac130a06a7ebacea0a8ff249dea
                 </ul>
             </li>
             <li class="liMainMenu showHideSubMenu">
