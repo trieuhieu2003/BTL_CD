@@ -46,7 +46,7 @@ try {
 
 
             $stmt = $conn->prepare($sql);
-            $stmt->execute($value); // Sửa từ $supplier_data thành $value
+            $stmt->execute($supplier_data);
         }
     }
     $success = true;
@@ -58,7 +58,7 @@ try {
 
 $_SESSION['response'] = [
     'message' => $message,
-    'success' => $success // Sửa từ 'seccess' thành 'success'
+    'seccess' => $success
 ];
 
 
