@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 // Bắt đầu phiên làm việc
 session_start();
@@ -14,6 +15,8 @@ $products = json_encode($products ?? []);
 <!DOCTYPE html>
 <html lang="en">
 
+=======
+>>>>>>> Trung_Tan
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
