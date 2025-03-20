@@ -8,6 +8,15 @@ $table_name = $_SESSION['table'];
 $columns = $table_columns_mapping[$table_name];
 $user = $_SESSION['user'];
 
+if (empty($_POST['product_name'])) {
+    $_SESSION['response'] = [
+        'success' => false,
+        'message' => 'Tên sản phẩm không được để trống!'
+    ];
+    header('location: ../' . $_SESSION['redirect_to']);
+    exit();
+}
+
 // Kiểm tra dữ liệu đầu vào dựa trên bảng
 if ($table_name == 'users') {
     $first_name = isset($_POST['first_name']) ? trim($_POST['first_name']) : '';
@@ -47,6 +56,7 @@ if ($table_name == 'users') {
         header('location: ../' . $_SESSION['redirect_to']);
         exit();
     }
+    
 }
 
 // Chuẩn bị dữ liệu để chèn vào cơ sở dữ liệu
