@@ -480,7 +480,7 @@ ul.dashboard_menu_lists {
 }
 
 ul.dashboard_menu_lists li.liMainMenu {
-  padding-top: 15px ;
+  padding-top: 15px;
   /* font-size: 18px; */
   text-transform: uppercase;
 }
@@ -664,7 +664,7 @@ div.dashboard_content_main {
   min-height: 800px;
   height: 100%;
   border: 1px solid green;
-  padding-left:30px ;
+  padding-left: 30px;
 }
 
 div#errorMessage {
@@ -692,36 +692,42 @@ p.responseMessage_error {
 p.responseMessage_success {
   background: rgba(0, 128, 0, 0.1);
 }
-ul.subMenus{
+
+ul.subMenus {
   list-style: none;
-  background: #c26a80 ;
+  background: #c26a80;
   padding: unset;
   display: none;
 }
-a.subMenuLink{
+
+a.subMenuLink {
   padding-top: 10px !important;
-  padding-left: 25px!important;
-  padding-bottom: 10px!important;
+  padding-left: 25px !important;
+  padding-bottom: 10px !important;
   text-decoration: none;
   font-size: 15px !important;
 }
-a.subMenuLink i{
+
+a.subMenuLink i {
   font-size: 10px !important;
-  width:  16px !important;
+  width: 16px !important;
 }
-i.mainMenuIconArrow{
+
+i.mainMenuIconArrow {
   float: right;
   font-size: 15px !important;
-  margin-top: 7px;;
+  margin-top: 7px;
+  ;
 }
-.subMenuActive{
+
+.subMenuActive {
   font-weight: bold;
   /* border-top: 2px solid white;
   border-bottom: 2px solid white;
   background: #763a49; */
 }
 
-.productTextAreaInput{
+.productTextAreaInput {
   width: 100%;
   height: 75px;
   border-radius: 5px;
@@ -730,7 +736,7 @@ i.mainMenuIconArrow{
 
 /* view products */
 
-.productImages{
+.productImages {
   width: 100px;
   height: 100px;
 
