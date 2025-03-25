@@ -138,30 +138,8 @@ $products = include('database/show.php');
     $supplier_arr = json_encode($supplier_arr);
     ?>
 
-    <script src="js/script.js">
-    </script>
-    <script src="js/jquery/jquery-3.7.1.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.js"
-        integrity="sha512-AZ+KX5NScHcQKWBfRXlCtb+ckjKYLO1i10faHLPXtGacz34rhXU8KM4t77XXG/Oy9961AeLqB/5o0KTJfy2WiA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script>
-    </script>
+    <script src="js/script.js"></script>
+    
     <script>
         var suppliersList = <?= $supplier_arr ?>;
 
@@ -171,9 +149,8 @@ $products = include('database/show.php');
             this.registerEvents = function() {
 
                 document.addEventListener('click', function(e) {
-                    targetElement = e.target; //target element is the element that triggered the event
+                    targetElement = e.target; 
                     classList = targetElement.classList;
-
 
 
                     if (classList.contains('deleteProduct')) {
@@ -211,19 +188,14 @@ $products = include('database/show.php');
                         e.preventDefault();
 
                         pId = targetElement.dataset.pid;
-
-
                         vm.showEditDialog(pId);
-
-
-
 
                     }
                 });
 
                 document.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    targetElement = e.target; //target element is the element that triggered the event
+                    targetElement = e.target; 
 
                     if (targetElement.id === 'editProductForm') {
                         vm.saveUpdateData(targetElement);
@@ -297,16 +269,12 @@ $products = include('database/show.php');
                             if (isUpdate) {
 
                                 document.getElementById('editProductSubmitBtn').click();
-
-
-
                             }
                         }
 
                     });
 
                 }, 'json');
-
 
             }
 

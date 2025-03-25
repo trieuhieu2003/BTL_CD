@@ -74,6 +74,10 @@ div.loginHeader {
   text-align: center;
 }
 
+.alignLeft{
+  text-align: left;
+}
+
 div.loginHeader {
   margin-bottom: 60px;
 }
@@ -803,4 +807,10 @@ i.mainMenuIconArrow {
 .po-badge-complete {
   background: #b5ebb5;
   border-color: green;
+}
+
+.po-badge-incomplete {
+  background: #f7e640;
+  border-color: #392b2b;
+  border-color: #a3a3a3;
 }
