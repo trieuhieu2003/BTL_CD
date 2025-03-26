@@ -40,6 +40,7 @@ try {
     $stmt = $conn->prepare($sql);
     $stmt->execute([$pid]);
 
+
     //lấy dữ liệu
     $suppliers = isset($_POST['suppliers']) ? $_POST['suppliers'] : [];
 

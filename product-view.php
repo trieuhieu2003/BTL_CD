@@ -3,8 +3,9 @@ session_start();
 
 if (!isset($_SESSION['user']))
     header('location: login.php');
-$show_table = 'products';
 
+
+$show_table = 'products';
 $products = include('database/show.php');
 
 

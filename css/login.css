@@ -741,3 +741,66 @@ i.mainMenuIconArrow {
   height: 100px;
 
 }
+
+/* quản lý đơn hàng */
+
+.poList {
+  margin-bottom: 25px;
+  padding: 15px;
+  border-bottom: solid 1px #d1d1d1;
+  border-radius: 5px;
+  background: #fbfbfb;
+}
+
+.poList p {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #d55f7d;
+  font-size: 16px;
+}
+
+.poList table td,
+.poList table th {
+  border: none;
+  border-bottom: 1px dotted #b7b7b7;
+}
+
+.poList table td {
+  padding: 13px 14px;
+  font-size: 13px;
+}
+
+.poList table th {
+  padding: 15px 10px;
+}
+
+.poOrderUpdateBtnContainer {
+  margin-top: 20px;
+}
+
+.updatePoBtn {
+  color: #f685a2;
+  background: #fff;
+  border: 1px solid #f685a2;
+}
+
+.updatePoBtn:hover {
+  color: #fff;
+  background: #f685a2;
+}
+
+.po-badge {
+  padding: 4px 6px;
+  border: 1px solid;
+}
+
+.po-badge-pending {
+  background: #ff7c76;
+  border-color: #556455;
+
+}
+
+.po-badge-complete {
+  background: #b5ebb5;
+  border-color: green;
+}
