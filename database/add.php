@@ -10,7 +10,7 @@ include('table_columns.php');
 $table_name = $_SESSION['table'];
 $columns = $table_columns_mapping[$table_name];
 
-// Duyệt qua các cột trong bảng.
+// Duyệt qua các cột trong bảng.  
 $db_arr = [];
 $user = $_SESSION['user'];
 
@@ -27,18 +27,18 @@ foreach ($columns as $column) {
     } else if ($column == 'img') {
         // Nếu là cột 'img' thì xử lý file hình ảnh.
         $target_dir = "../uploads/products/";
-        $file_data = $_FILES[$column];  // Giữ nguyên mảng file_data
+        $file_data = $_FILES[$column];
 
-        $file_name = $file_data["name"];  // Lấy tên file từ mảng
-        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);  // Lấy phần mở rộng của file
+        $file_name = $file_data["name"];
+        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
 
-        $new_file_name = 'product-' . time() . '.' . $file_ext;  // Tạo tên mới cho file
+        $new_file_name = 'product-' . time() . '.' . $file_ext;
 
-        $check = getimagesize($file_data['tmp_name']);  // Kiểm tra xem file có phải là hình ảnh không
+        $check = getimagesize($file_data['tmp_name']);
 
         if ($check) {
             if (move_uploaded_file($file_data['tmp_name'], $target_dir . $new_file_name)) {
-                $value = $new_file_name;  // Gán tên file mới
+                $value = $new_file_name;
             } else {
                 $value = '';  // Nếu không upload được file
             }
@@ -59,6 +59,19 @@ foreach ($columns as $column) {
 $table_properties = implode(", ", array_keys($db_arr));
 // Tạo danh sách các placeholder tương ứng để sử dụng trong truy vấn SQL.
 $table_placeholders = ':' . implode(", :", array_keys($db_arr));
+
+if (isset($db_arr['permissions'])) {
+    if ($db_arr['permissions'] == '') {
+        $_SESSION['response'] = [
+            'success' => false,
+            'message' => 'Hãy Chọn Quyền Người Dùng!'
+        ];
+
+        header('location: ../' . $_SESSION['redirect_to']);
+        die;
+    }
+}
+
 
 try {
     // Tạo truy vấn SQL để chèn dữ liệu vào bảng
@@ -89,5 +102,4 @@ try {
 
 $_SESSION['response'] = $response;
 header('location: ../' . $_SESSION['redirect_to']);
-
 ?>

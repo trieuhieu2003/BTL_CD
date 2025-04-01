@@ -1,9 +1,5 @@
 <?php
-    session_start();
-    
-    if (!isset($_SESSION['user'])) header("Location: login.php");
-        
-    
+session_start();
 
     $user = $_SESSION['user'];
 //get graph data -purcher order by status
@@ -13,6 +9,9 @@
 //get line graph data - delivery history per day
     // include('database/delivery_history.php');
 
+$user = $_SESSION['user'];
+
+// $session_user = $$_SESSION['user'];
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +33,7 @@
         <?php include('partials/app_slidebar.php')?>
         <div class="dashboard_content_container" id="dashboard_content_container">
             <div class="dashboard_content">
-                <?php include('partials/app_topnav.php')?>
+            <?php include('partials/app_topnav.php')?>
                 <div class="dashboard_content_main">
                     <div class="col50">
                     <figure class="highcharts-figure">

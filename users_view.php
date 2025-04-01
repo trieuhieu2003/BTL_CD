@@ -4,8 +4,9 @@ session_start();
 if (!isset($_SESSION['user']))
     header('location: login.php');
 $_SESSION['table'] = 'users';
+$user = $_SESSION['user'];
 
-$_SESSION['table'] = 'users';
+$show_table = 'users';
 
 $users = include('database/show.php');
 
@@ -35,6 +36,7 @@ $users = include('database/show.php');
         <div class="dashboard_content_container">
             <?php include('partials/app_topnav.php') ?>
             <div class="dashboard_content">
+                
                 <div class="dashboard_content_main">
                     <div class="row">
                         <div class="column column-12">
@@ -68,9 +70,8 @@ $users = include('database/show.php');
                                                     <td>
                                                         <a href="" class="updateUser" data-userid="<?= $user['id'] ?>"><i class="fa fa-pencil"></i>Sửa</a>
                                                         <a href="" class="deleteUser" data-userid="<?= $user['id'] ?>" data-fname="<?= $user['first_name'] ?>" data-lname="<?= $user['last_name'] ?>"><i class="fa fa-trash"></i>Xoá</a>
+                                                        <input type="hidden" id="cur_permission_<?= $user['id'] ?>" value="<?= $user['permissions'] ?>">
                                                     </td>
-
-
                                                 </tr>
                                             <?php } ?>
 
@@ -106,15 +107,150 @@ $users = include('database/show.php');
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.js" integrity="sha512-AZ+KX5NScHcQKWBfRXlCtb+ckjKYLO1i10faHLPXtGacz34rhXU8KM4t77XXG/Oy9961AeLqB/5o0KTJfy2WiA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function script() {
+            this.permissions = [];
+            
+            this.permissionEl = '\
+                <div class="permissions">\
+                    <h4>Permissions</h4>\
+                    <hr>\
+                    <div id="permissionsContainer">\
+                        <div class="permission">\
+                            <div class="row">\
+                                <div class="col-md-3">\
+                                    <p class="moduleName">Dashboard</p>\
+                                </div>\
+                                <div class="col-md-2">\
+                                    <p class="moduleFunc" data-value="dashboard_view">Xem</p>\
+                                </div>\
+                            </div>\
+                        </div>\
+                        <div class="permission">\
+                            <div class="row">\
+                                <div class="col-md-3">\
+                                    <p class="moduleName">Báo cáo</p>\
+                                </div>\
+                                <div class="col-md-2">\
+                                    <p class="moduleFunc" data-value="report_view">Xem</p>\
+                                </div>\
+                            </div>\
+                        </div>\
+                        <div class="permission">\
+                            <div class="row">\
+                                <div class="col-md-3">\
+                                    <p class="moduleName">Đơn Hàng</p>\
+                                </div>\
+                                <div class="col-md-2">\
+                                    <p class="moduleFunc" data-value="po_view">Xem</p>\
+                                </div>\
+                                <div class="col-md-2">\
+                                    <p class="moduleFunc" data-value="po_create">Thêm</p>\
+                                </div>\
+                                <div class="col-md-2">\
+                                    <p class="moduleFunc" data-value="po_edit">Sửa</p>\
+                                </div>\
+                            </div>\
+                        </div>\
+                        <div class="permission">\
+                            <div class="row">\
+                                <div class="col-md-3">\
+                                    <p class="moduleName">Sản Phẩm</p>\
+                                </div>\
+                                <div class="col-md-2">\
+                                    <p class="moduleFunc" data-value="product_view">Xem</p>\
+                                </div>\
+                                <div class="col-md-2">\
+                                    <p class="moduleFunc" data-value="product_create">Thêm</p>\
+                                </div>\
+                                <div class="col-md-2">\
+                                    <p class="moduleFunc" data-value="product_edit">Sửa</p>\
+                                </div>\
+                                <div class="col-md-2">\
+                                    <p class="moduleFunc" data-value="product_delete">Xoá</p>\
+                                </div>\
+                            </div>\
+                            <div class="permission">\
+                                <div class="row">\
+                                    <div class="col-md-3">\
+                                        <p class="moduleName">Nhà Cung Cấp</p>\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <p class="moduleFunc" data-value="supplier_view">Xem</p>\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <p class="moduleFunc" data-value="supplier_create">Thêm</p>\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <p class="moduleFunc" data-value="supplier_edit">Sửa</p>\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <p class="moduleFunc" data-value="supplier_delete">Xoá</p>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            <div class="permission">\
+                                <div class="row">\
+                                    <div class="col-md-3">\
+                                        <p class="moduleName">Người Dùng</p>\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <p class="moduleFunc" data-value="user_view">Xem</p>\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <p class="moduleFunc" data-value="user_create">Thêm</p>\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <p class="moduleFunc" data-value="user_edit">Sửa</p>\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <p class="moduleFunc" data-value="user_delete">Xoá</p>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            <div class="permission">\
+                                <div class="row">\
+                                    <div class="col-md-3">\
+                                        <p class="moduleName">Điểm Bán</p>\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <p class="moduleFunc" data-value="pos">Trợ Cấp</p>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </div>';
 
             this.initialize = function() {
                     this.registerEvents();
                 },
 
                 this.registerEvents = function() {
+                    var self = this;
                     document.addEventListener('click', function(e) {
                         targetElement = e.target;
                         classList = targetElement.classList;
+
+
+                        let target = e.target;
+
+                        if (target.classList.contains('moduleFunc')) {
+                            let permissionName = target.dataset.value;
+
+                            if (target.classList.contains('permissionActive')) {
+                                target.classList.remove('permissionActive');
+
+                                script.permissions = script.permissions.filter((name) => {
+                                    return name !== permissionName;
+                                });
+                            } else {
+                                target.classList.add('permissionActive');
+                                script.permissions.push(permissionName);
+                            }
+
+                            document.getElementById('permission_el')
+                                .value = script.permissions.join(',');
+                        }
+
+
 
                         if (classList.contains('deleteUser')) {
 
@@ -154,6 +290,8 @@ $users = include('database/show.php');
                             lastName = targetElement.parentElement.parentElement.querySelector('td.LastName').innerHTML;
                             email = targetElement.parentElement.parentElement.querySelector('td.email').innerHTML;
                             userId = targetElement.dataset.userid;
+                            let permissions = document.getElementById('cur_permission_' + userId).value;
+                            
 
                             BootstrapDialog.confirm({
                                 title: 'Cập nhật người dùng ' + firstName + ' ' + lastName,
@@ -164,18 +302,19 @@ $users = include('database/show.php');
                                 <div class="form-group">\ <label for="last_Name">Tên:</label>\
                                     <input type="text" class="form-control" id="lastName" name="last_name" value="' + lastName + '">\</div>\
                                 <div class="form-group">\ <label for="email">Email:</label>\
-                                    <input type="text" class="form-control" id="emailUpdate" name="email" value="' + email + '">\</div>\
+                                    <input type="text" class="form-control" id="emailUpdate" name="email" value="' + email + '">\</div>' + self.permissionEl + '\
+                                <input type="hidden" id="permission_el" name="permissions" value="'+ permissions + '" >\
                                 </form>',
                                 callback: function(isUpdate) {
-
-                                    if (isUpdate) {
+                                    if (isUpdate) {                                                                                                                                     
                                         $.ajax({
                                             method: 'POST',
                                             data: {
                                                 userId: userId,
                                                 f_name: document.getElementById('firstName').value,
                                                 l_name: document.getElementById('lastName').value,
-                                                email: document.getElementById('emailUpdate').value
+                                                email: document.getElementById('emailUpdate').value,
+                                                permissions: document.getElementById('permission_el').value
                                             },
                                             url: 'database/update-user.php',
                                             dataType: 'json',
@@ -199,8 +338,22 @@ $users = include('database/show.php');
                                             }
                                         })
                                     }
-                                }
+                                },
+                                onshown: function(){
+                                    script.permissions = [];
 
+                                    let permissionsArr = permissions.split(',');
+
+                                    permissionsArr.forEach((permission)=>{
+                                        if(permission !== ''){
+                                            let targetEl = document.querySelector("[data-value='" + permission + "']");
+                                            if(targetEl != null){
+                                                targetEl.classList.add('permissionActive');
+                                                script.permissions.push(permission);
+                                            }
+                                        }
+                                    });
+                                }
                             });
                         }
                     });

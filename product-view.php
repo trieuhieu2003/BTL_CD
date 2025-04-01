@@ -3,8 +3,9 @@ session_start();
 
 if (!isset($_SESSION['user']))
     header('location: login.php');
-$_SESSION['table'] = 'products';
 
+
+$show_table = 'products';
 $products = include('database/show.php');
 
 
@@ -51,6 +52,7 @@ $products = include('database/show.php');
                                                 <th>Ảnh</th>
                                                 <th>Tên sản phẩm</th>
                                                 <th>Mô tả</th>
+                                                <th>Nhà cung cấp </th>
                                                 <th>Tạo bởi</th>
                                                 <th>Ngày tạo</th>
                                                 <th>Ngày cập nhật</th>
@@ -67,10 +69,28 @@ $products = include('database/show.php');
                                                     </td>
                                                     <td class="LastName"><?= $product['product_name'] ?></td>
                                                     <td class="email"><?= $product['description'] ?></td>
+                                                    <td class="email">
+                                                        <?php
+                                                        $supplier_list = '-';
+
+                                                        $pid = $product['id'];
+                                                        $stmt = $conn->prepare("SELECT supplier_name FROM suppliers, productsuppliers WHERE productsuppliers.product=$pid AND productsuppliers.supplier=suppliers.id");
+                                                        $stmt->execute();
+                                                        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                                        if ($row) {
+
+                                                            $supplier_arr = array_column($row, "supplier_name");
+                                                            $supplier_list = '<li>' . implode(',', $supplier_arr);
+                                                        }
+                                                        echo $supplier_list;
+
+                                                        ?>
+                                                    </td>
                                                     <td>
                                                         <?php
-                                                        $pid = $product['created_by'];
-                                                        $stmt = $conn->prepare("SELECT * FROM users WHERE id=$pid");
+                                                        $uid = $product['created_by'];
+                                                        $stmt = $conn->prepare("SELECT * FROM users WHERE id=$uid");
                                                         $stmt->execute();
                                                         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -105,42 +125,33 @@ $products = include('database/show.php');
     </div>
     
 
+    <?php
+    include('partials/app-scripts.php');
 
+    $show_table = 'suppliers';
+    $suppliers = include('database/show.php');
 
-    <script src="js/script.js">
-    </script>
-    <script src="js/jquery/jquery-3.7.1.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    $supplier_arr = [];
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    foreach ($suppliers as $supplier) {
+        $supplier_arr[$supplier['id']] = $supplier['supplier_name'];
+    }
+    $supplier_arr = json_encode($supplier_arr);
+    ?>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.js"
-        integrity="sha512-AZ+KX5NScHcQKWBfRXlCtb+ckjKYLO1i10faHLPXtGacz34rhXU8KM4t77XXG/Oy9961AeLqB/5o0KTJfy2WiA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    <script src="js/script.js"></script>
+    
     <script>
-    </script>
-    <script>
+        var suppliersList = <?= $supplier_arr ?>;
+
         function Script() { // Đặt tên hàm với chữ cái đầu in hoa (theo quy tắc PascalCase)
             var vm = this; // Đặt tên biến vm (viết tắt của ViewModel)
 
             this.registerEvents = function() {
 
                 document.addEventListener('click', function(e) {
-                    targetElement = e.target; //target element is the element that triggered the event
+                    targetElement = e.target; 
                     classList = targetElement.classList;
-
 
 
                     if (classList.contains('deleteProduct')) {
@@ -178,19 +189,14 @@ $products = include('database/show.php');
                         e.preventDefault();
 
                         pId = targetElement.dataset.pid;
-
-
                         vm.showEditDialog(pId);
-
-
-
 
                     }
                 });
 
                 document.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    targetElement = e.target; //target element is the element that triggered the event
+                    targetElement = e.target; 
 
                     if (targetElement.id === 'editProductForm') {
                         vm.saveUpdateData(targetElement);
@@ -225,6 +231,13 @@ $products = include('database/show.php');
                 $.get('database/get-product.php', {
                     id: id
                 }, function(productDetails) {
+                    let curSuppliers = productDetails['suppliers'];
+                    let supplierOption = '';
+
+                    for (const [supId, supName] of Object.entries(suppliersList)) {
+                        selected = curSuppliers.indexOf(supId) > -1 ? 'selected' : '';
+                        supplierOption += "<option " + selected + " value='" + supId + "'>" + supName + "</option>";
+                    }
 
                     BootstrapDialog.confirm({
                         title: 'Cập nhật <strong> ' + productDetails.product_name + '</strong>',
@@ -232,6 +245,13 @@ $products = include('database/show.php');
                             <div class="appFormInputContainer">\
                                         <label for="product_name">Tên sản phẩm</label>\
                                         <input type="text" class="appFormInput" id="product_name" value="' + productDetails.product_name + '" placeholder=" Nhập tên sản phẩm..." name="product_name">\
+                                    </div>\
+                                    <div class="appFormInputContainer">\
+                                        <label for="description">Nhà cung cấp</label>\
+                                        <select name="suppliers[]" id="suppliersSelect" multiple="">\
+                                            <option value="">Chọn nhà cung cấp</option>\
+                                            ' + supplierOption + '\
+                                        </select>\
                                     </div>\
                                     <div class="appFormInputContainer">\
                                         <label for="description">Mô tả</label>\
@@ -250,16 +270,12 @@ $products = include('database/show.php');
                             if (isUpdate) {
 
                                 document.getElementById('editProductSubmitBtn').click();
-
-
-
                             }
                         }
 
                     });
 
                 }, 'json');
-
 
             }
 

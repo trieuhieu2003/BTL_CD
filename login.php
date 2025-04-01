@@ -28,6 +28,31 @@ if ($_POST) {
   } else 
     $error_message = 'Tên đăng nhập hoặc mật khẩu không đúng';
 }
+
+//   $stmt = $conn->prepare("SELECT * FROM users");
+//   $stmt->execute();
+//   $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+//   $users = $stmt->fetchAll();
+
+//   $user_exist = false;
+//   foreach ($users as $user) {
+//     $upass = $user['password'];
+
+//     if (password_verify($password, $upass)) {
+//       $user_exist = true;
+//       $user['permissions'] = explode(',', $user['permissions']);
+//       $_SESSION['user'] = $user;
+//       break;
+//     }
+//   }
+
+//   if ($user_exist)
+//     header('Location: dashboard.php');
+//   else
+//     $error_message = 'Tên đăng nhập hoặc mật khẩu không đúng';
+
+// }
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +66,7 @@ if ($_POST) {
 </head>
 
 <body id="loginBody">
-  <?php if (!empty($error_message)){ ?>
+  <?php if (!empty($error_message)) { ?>
     <div id="errorMessage">
       <strong>Error:</strong>
       </p><?= $error_message ?></p>
