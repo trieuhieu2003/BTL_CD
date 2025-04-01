@@ -74,7 +74,7 @@ if (isset($db_arr['permissions'])) {
 
 
 try {
-    // Tạo truy vấn SQL để chèn dữ liệu vào bảng
+    // Tạo truy vấn SQL để chèn dữ liệu vào bảng products
     $sql = "INSERT INTO 
                 $table_name($table_properties)
             VALUES 
@@ -83,9 +83,24 @@ try {
     // Kết nối đến cơ sở dữ liệu
     include('connection.php');
 
-    // Chuẩn bị và thực thi truy vấn
+    // Thực thi truy vấn và lấy ID sản phẩm vừa thêm
     $stmt = $conn->prepare($sql);
     $stmt->execute($db_arr);
+    $product_id = $conn->lastInsertId(); // Lấy ID của sản phẩm mới
+
+    // Xử lý thêm nhà cung cấp vào bảng productsuppliers
+    if ($table_name === 'products' && isset($_POST['suppliers']) && is_array($_POST['suppliers'])) {
+        $suppliers = $_POST['suppliers'];
+
+        foreach ($suppliers as $supplier_id) {
+            $sql = "INSERT INTO productsuppliers (product, supplier) VALUES (:product_id, :supplier_id)";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([
+                'product_id' => $product_id,
+                'supplier_id' => $supplier_id
+            ]);
+        }
+    }
 
     // Trả về phản hồi thành công
     $response = [
@@ -102,4 +117,3 @@ try {
 
 $_SESSION['response'] = $response;
 header('location: ../' . $_SESSION['redirect_to']);
-?>

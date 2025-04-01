@@ -58,7 +58,7 @@ try {
 
 $_SESSION['response'] = [
     'message' => $message,
-    'seccess' => $success
+    'success' => $success
 ];
 
 
