@@ -14,8 +14,6 @@ $columns = $table_columns_mapping[$table_name];
 $db_arr = [];
 $user = $_SESSION['user'];
 
-
-
 foreach ($columns as $column) {
     if (in_array($column, ['created_at', 'updated_at'])) {
         // Nếu là cột 'created_at' hoặc 'updated_at' thì gán giá trị ngày giờ hiện tại.
@@ -29,10 +27,10 @@ foreach ($columns as $column) {
     } else if ($column == 'img') {
         // Nếu là cột 'img' thì xử lý file hình ảnh.
         $target_dir = "../uploads/products/";
-        $file_data = $_FILES[$column];  
+        $file_data = $_FILES[$column];
 
         $file_name = $file_data["name"];
-        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);  
+        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
 
         $new_file_name = 'product-' . time() . '.' . $file_ext;
 
@@ -40,7 +38,7 @@ foreach ($columns as $column) {
 
         if ($check) {
             if (move_uploaded_file($file_data['tmp_name'], $target_dir . $new_file_name)) {
-                $value = $new_file_name; 
+                $value = $new_file_name;
             } else {
                 $value = '';  // Nếu không upload được file
             }
@@ -62,8 +60,21 @@ $table_properties = implode(", ", array_keys($db_arr));
 // Tạo danh sách các placeholder tương ứng để sử dụng trong truy vấn SQL.
 $table_placeholders = ':' . implode(", :", array_keys($db_arr));
 
+if (isset($db_arr['permissions'])) {
+    if ($db_arr['permissions'] == '') {
+        $_SESSION['response'] = [
+            'success' => false,
+            'message' => 'Hãy Chọn Quyền Người Dùng!'
+        ];
+
+        header('location: ../' . $_SESSION['redirect_to']);
+        die;
+    }
+}
+
+
 try {
-    // Tạo truy vấn SQL để chèn dữ liệu vào bảng
+    // Tạo truy vấn SQL để chèn dữ liệu vào bảng products
     $sql = "INSERT INTO 
                 $table_name($table_properties)
             VALUES 
@@ -72,9 +83,24 @@ try {
     // Kết nối đến cơ sở dữ liệu
     include('connection.php');
 
-    // Chuẩn bị và thực thi truy vấn
+    // Thực thi truy vấn và lấy ID sản phẩm vừa thêm
     $stmt = $conn->prepare($sql);
     $stmt->execute($db_arr);
+    $product_id = $conn->lastInsertId(); // Lấy ID của sản phẩm mới
+
+    // Xử lý thêm nhà cung cấp vào bảng productsuppliers
+    if ($table_name === 'products' && isset($_POST['suppliers']) && is_array($_POST['suppliers'])) {
+        $suppliers = $_POST['suppliers'];
+
+        foreach ($suppliers as $supplier_id) {
+            $sql = "INSERT INTO productsuppliers (product, supplier) VALUES (:product_id, :supplier_id)";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([
+                'product_id' => $product_id,
+                'supplier_id' => $supplier_id
+            ]);
+        }
+    }
 
     // Trả về phản hồi thành công
     $response = [

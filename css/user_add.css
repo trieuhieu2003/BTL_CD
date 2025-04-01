@@ -109,3 +109,37 @@ p.userCount {
     font-size: 15px;
     color: #f685a1;
 }
+
+.permissions {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border: 1px solid #eee;
+}
+
+
+
+.permissions .moduleName {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.moduleFunc {
+    text-align: center;
+    border: 1px solid #c1c1c1;
+    cursor: pointer;
+}
+
+.permission {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.permissionActive {
+    background: #f685a1;
+    color: #fff;
+    border: 1px solid #de2855;
+    transition: 0.3s;
+}

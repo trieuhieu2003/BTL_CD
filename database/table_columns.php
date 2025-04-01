@@ -7,7 +7,8 @@ $table_columns_mapping = [
         'email',
         'password',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'permissions'
     ],
     'products' => [
         'product_name',

@@ -74,7 +74,7 @@ div.loginHeader {
   text-align: center;
 }
 
-.alignLeft{
+.alignLeft {
   text-align: left;
 }
 
@@ -665,7 +665,6 @@ a#logoutBtn {
 
 div.dashboard_content_main {
   background: #fff;
-  min-height: 800px;
   height: 100%;
   border: 1px solid green;
   padding-left: 30px;
