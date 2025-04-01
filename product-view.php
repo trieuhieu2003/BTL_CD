@@ -123,6 +123,7 @@ $products = include('database/show.php');
         </div>
 
     </div>
+    
 
     <?php
     include('partials/app-scripts.php');
