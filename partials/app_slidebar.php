@@ -21,14 +21,8 @@ $user = $_SESSION['user'];
                 </a>
 
                 <ul class="subMenus" id="user">
-<<<<<<< HEAD
-                    <li><a class="subMenuLink" href="./product-view.php"><i class="fas fa-circle"></i>view Product</a></li>
-                    <li><a class="subMenuLink" href="./product-add.php"><i class="fas fa-circle"></i>add Product</a></li>
-                    <li><a class="subMenuLink" href="./product-order.php"><i class="fas fa-circle"></i>Order Product</a></li>
-=======
                     <li><a class="subMenuLink" href="./product-view.php"><i class="fas fa-circle"></i>Quản Lý Sản Phẩm</a></li>
                     <li><a class="subMenuLink" href="./product-add.php"><i class="fas fa-circle"></i>Thêm Sản Phẩm</a></li>
->>>>>>> Trung_Tan
                 </ul>
             </li>
             <li class="liMainMenu">
@@ -39,25 +33,20 @@ $user = $_SESSION['user'];
                 </a>
 
                 <ul class="subMenus" id="user">
-<<<<<<< HEAD
-                    <li><a class="subMenuLink" href=""><i class="fas fa-circle"></i>Quản Lý Nhà Cung Cấp</a></li>
-                    <li><a class="subMenuLink" href=""><i class="fas fa-circle"></i>Thêm Nhà Cung Cấp</a></li>
+                    <li><a class="subMenuLink" href="./supplier-view.php"><i class="fas fa-circle"></i>Quản lý nhà cung cấp</a></li>
+                    <li><a class="subMenuLink" href="./supplier-add.php"><i class="fas fa-circle"></i>Thêm Nhà Cung Cấp</a></li>
                 </ul>
             </li>
             <li class="liMainMenu">
                 <a href="javascript:void(0);" class="showHideSubMenu">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="menuText showHideSubMenu">Đơn Hàng</span>
+                    <i class="fas fa-shopping-cart showHideSubMenu"></i>
+                    <span class="menuText showHideSubMenu">Quản Lý Đơn Hàng</span>
                     <i class="fas fa-angle-left mainMenuIconArrow showHideSubMenu"></i>
                 </a>
-                
+
                 <ul class="subMenus" id="user">
-                    <li><a class="subMenuLink" href="./view-order.php"><i class="fas fa-circle"></i>Quản Lý Đơn Hàng</a></li>
-                    <li><a class="subMenuLink" href="./product-order.php"><i class="fas fa-circle"></i>Tạo Đơn Hàng</a></li>
-=======
-                    <li><a class="subMenuLink" href="./supplier-view.php"><i class="fas fa-circle"></i>view Supplier</a></li>
-                    <li><a class="subMenuLink" href="./supplier-add.php"><i class="fas fa-circle"></i>add Supplier</a></li>
->>>>>>> 7eb623cd54bb1ac130a06a7ebacea0a8ff249dea
+                    <li><a class="subMenuLink" href="./view-order.php"><i class="fas fa-circle"></i>Quản lý đơn hàng</a></li>
+                    <li><a class="subMenuLink" href="./product-order.php"><i class="fas fa-circle"></i>Thêm đơn hàng</a></li>
                 </ul>
             </li>
             <li class="liMainMenu showHideSubMenu">
