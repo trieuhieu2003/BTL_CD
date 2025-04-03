@@ -22,8 +22,8 @@ foreach ($columns as $column) {
         // Nếu là cột 'created_by' thì gán ID của người dùng hiện tại.
         $value = $user['id'];
     } else if ($column == 'password') {
-        // Nếu là cột 'password' thì mã hóa mật khẩu trước khi lưu.
-        $value = password_hash($_POST[$column], PASSWORD_DEFAULT);
+        // BỎ mã hóa mật khẩu, lưu trực tiếp vào database.
+        $value = $_POST[$column];
     } else if ($column == 'img') {
         // Nếu là cột 'img' thì xử lý file hình ảnh.
         $target_dir = "../uploads/products/";
@@ -72,7 +72,6 @@ if (isset($db_arr['permissions'])) {
     }
 }
 
-
 try {
     // Tạo truy vấn SQL để chèn dữ liệu vào bảng products
     $sql = "INSERT INTO 
@@ -117,3 +116,4 @@ try {
 
 $_SESSION['response'] = $response;
 header('location: ../' . $_SESSION['redirect_to']);
+?>

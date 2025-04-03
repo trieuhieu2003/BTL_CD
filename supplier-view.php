@@ -37,6 +37,8 @@ $suppliers = include('database/show.php');
         <div class="dashboard_content_container">
             <?php include('partials/app_topnav.php') ?>
             <div class="dashboard_content">
+            <?php if(in_array('supplier_view',$user['permissions'])){?>
+
                 <div class="dashboard_content_main">
                     <div class="row">
                         <div class="column column-12">
@@ -101,8 +103,10 @@ $suppliers = include('database/show.php');
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($supplier['updated_at'])) ?></td>
 
                                                     <td>
-                                                        <a href="" class="updateSupplier" data-sid="<?= $supplier['id'] ?>"><i class="fa fa-pencil"></i>Sửa</a>
-                                                        <a href="" class="deleteSupplier" data-name="<?= $supplier['supplier_name'] ?>" data-sid="<?= $supplier['id'] ?>"><i class="fa fa-trash"></i>Xoá</a>
+                                                        <a href="" class="<?= in_array('supplier_edit',$user['permissions'])? 'updateSupplier':'accessDeniedError' ?>" 
+                                                        data-name="<?= $supplier['supplier_name'] ?>" data-sid="<?= $supplier['id'] ?>"><i class="fa fa-pencil"></i>Sửa</a>
+                                                        <a href="" class="<?= in_array('supplier_delete',$user['permissions'])? 'deleteSupplier':'accessDeniedError' ?>"
+                                                        data-name="<?= $supplier['supplier_name'] ?>" data-sid="<?= $supplier['id'] ?>"><i class="fa fa-trash"></i>Xoá</a>
                                                     </td>
                                                 </tr>
                                             <?php } ?>
@@ -116,6 +120,11 @@ $suppliers = include('database/show.php');
 
                     </div>
                 </div>
+                <?php } else {?>
+                    <div id="errorMessage">
+                        Không được cho phép
+                    </div>
+                <?php } ?>
             </div>
         </div>
 
@@ -170,6 +179,14 @@ $suppliers = include('database/show.php');
                 document.addEventListener('click', function(e) {
                     targetElement = e.target; //target element is the element that triggered the event
                     classList = targetElement.classList;
+
+                    if (classList.contains('accessDeniedError')) {
+                        e.preventDefault();
+                        BootstrapDialog.alert({
+                            type: BootstrapDialog.TYPE_DANGER,
+                            message: 'Không được cho phép'
+                        });
+                    }
 
 
 

@@ -38,6 +38,7 @@ $products = include('database/show.php');
         <div class="dashboard_content_container">
             <?php include('partials/app_topnav.php') ?>
             <div class="dashboard_content">
+            <?php if(in_array('product_view',$user['permissions'])){?>
                 <div class="dashboard_content_main">
                     <div class="row">
                         <div class="column column-12">
@@ -104,8 +105,12 @@ $products = include('database/show.php');
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($product['updated_at'])) ?></td>
 
                                                     <td>
-                                                        <a href="" class="updateProduct" data-pid="<?= $product['id'] ?>" data-pid="<?= $product['description'] ?>"><i class="fa fa-pencil"></i>Sửa</a>
-                                                        <a href="" class="deleteProduct" data-name="<?= $product['product_name'] ?>" data-pid="<?= $product['id'] ?>"><i class="fa fa-trash"></i>Xoá</a>
+                                                        <a href="" class="<?= in_array('product_edit',$user['permissions'])? 'updateProduct':'accessDeniedError'?>" 
+                                                        data-pid="<?= $product['id'] ?>" data-pid="<?= $product['description'] ?>">
+                                                        <i class="fa fa-pencil"></i>Sửa</a>
+                                                        <a href="" class="<?= in_array('product_delete',$user['permissions'])? 'deleteProduct':'accessDeniedError'?>" 
+                                                        data-name="<?= $product['product_name'] ?>" data-pid="<?= $product['id'] ?>">
+                                                        <i class="fa fa-trash"></i>Xoá</a>
                                                     </td>
                                                 </tr>
                                             <?php } ?>
@@ -118,6 +123,12 @@ $products = include('database/show.php');
                         </div>
 
                     </div>
+                
+                    <?php } else {?>
+                    <div id="errorMessage">
+                        Không được cho phép
+                    </div>
+                <?php } ?>  
                 </div>
             </div>
         </div>
@@ -183,6 +194,13 @@ $products = include('database/show.php');
                             })
 
                         }
+                    }
+                    if (classList.contains('accessDeniedError')) {
+                        e.preventDefault();
+                        BootstrapDialog.alert({
+                            type: BootstrapDialog.TYPE_DANGER,
+                            message: 'Không được cho phép'
+                        });
                     }
 
                     if (classList.contains('updateProduct')) {
