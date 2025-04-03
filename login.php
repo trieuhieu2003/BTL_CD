@@ -53,46 +53,7 @@ if ($user_exist) {
 } else {
     $error_message = 'Tên đăng nhập hoặc mật khẩu không đúng';
 }}
-if ($_POST) {
-  include('database/connection.php'); // Kết nối cơ sở dữ liệu
 
-  $username = $_POST['username'];  // Lấy tên đăng nhập
-  $password = $_POST['password'];  // Lấy mật khẩu
-
-  // Chuẩn bị truy vấn để lấy tất cả người dùng
-  $stmt = $conn->prepare("SELECT * FROM users");
-  $stmt->execute();
-  $stmt->setFetchMode(PDO::FETCH_ASSOC);
-
-  // Lấy tất cả người dùng
-  $users = $stmt->fetchAll();
-
-  $user_exist = false; // Biến kiểm tra nếu người dùng tồn tại
-
-  // Duyệt qua tất cả người dùng để so sánh tên đăng nhập và mật khẩu
-  foreach ($users as $user) {
-      $upass = $user['password'];
-
-      // So sánh trực tiếp tên đăng nhập và mật khẩu
-      if ($username === $user['username '] && $password === $upass) {
-          $user_exist = true;
-          // Lưu thông tin người dùng vào session
-          $user['permissions'] = explode(',', $user['permissions']);
-          $_SESSION['user'] = $user;
-          break; // Dừng vòng lặp khi tìm thấy người dùng
-      }
-  }
-
-  // Kiểm tra nếu tài khoản và mật khẩu đúng
-  if ($user_exist) {
-      // Điều hướng người dùng tới trang dashboard
-      header('Location: dashboard.php');
-      exit();
-  } else {
-      // Nếu tài khoản hoặc mật khẩu sai, hiển thị thông báo lỗi
-      $error_message = 'Tên đăng nhập hoặc mật khẩu không đúng';
-  }
-}
 ?>
 
 <!DOCTYPE html>
