@@ -1,6 +1,14 @@
 <?php
 session_start();
 
+
+
+
+if (!isset($_SESSION['user'])) header('location: login.php');
+
+//get session user from database
+$user = $_SESSION['user'];
+
     $user = $_SESSION['user'];
 //get graph data -purcher order by status
     include('database/po_status_pie_graph.php');
@@ -11,7 +19,6 @@ session_start();
 
 $user = $_SESSION['user'];
 
-// $session_user = $$_SESSION['user'];
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +41,7 @@ $user = $_SESSION['user'];
         <div class="dashboard_content_container" id="dashboard_content_container">
             <div class="dashboard_content">
             <?php include('partials/app_topnav.php')?>
+            <?php if(in_array('dashboard_view',$user['permissions'])){?>
                 <div class="dashboard_content_main">
                     <div class="col50">
                     <figure class="highcharts-figure">
@@ -58,6 +66,11 @@ $user = $_SESSION['user'];
                     <div id = "deliveryHistory">
 
                 </div>
+                <?php } else {?>
+                    <div id="errorMessage">
+                        Không được cho phép
+                    </div>
+                <?php } ?>  
                 </div>
                 
             </div>
