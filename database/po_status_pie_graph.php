@@ -1,22 +1,18 @@
 <?php
 include('connection.php');
-$status = ['pending', 'completed', 'incomplete'];
 
-$result = [];
+// Truy vấn số lượng đơn hàng theo trạng thái
+$stmt = $conn->prepare("SELECT status, COUNT(*) AS status_count FROM order_product GROUP BY status");
+$stmt->execute();
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// loop throuh statuses and query
-foreach ($status as $status) {
-    $stmt = $conn->prepare("SELECT  COUNT(*) AS status_count FROM order_product WHERE order_product.status = '".$status."'");
-    $stmt->execute();
-    $row = $stmt->Fetch();
-
-    $count = $row['status_count'];
-
-    $result[] = [
-        'name' => strtoupper($status),
-        'y' => (int) $count
+// Chuyển đổi dữ liệu thành định dạng Highcharts
+$chartData = [];
+foreach ($result as $row) {
+    $chartData[] = [
+        'name' => strtoupper($row['status']),
+        'y' => (int) $row['status_count']
     ];
 }
 ?>
-
 
