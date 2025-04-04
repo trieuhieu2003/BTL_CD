@@ -36,46 +36,53 @@ $products = json_encode($products ?? []);
         <div class="dashboard_content_container">
             <?php include('partials/app_topnav.php'); ?>
             <div class="dashboard_content">
-                <div class="dashboard_content_main">
-                    <div class="row">
-                        <div class="column column-12">
-                            <h1 class="section_header"><i class="fa fa-plus"></i> Đơn Hàng</h1>
-                            <div>
-                                <form action="database/save-order.php" method="POST">
-                                    <div class="alignRight">
-                                        <button type="button" class="orderBtn orderProductBtn" id="orderProductBtn">
-                                            Đặt Hàng Sản Phẩm </button>
-                                    </div>
-                                    <div id="orderProductLists">
-
-                                        <div id="orderProductLists">
-                                            <p id="noData" style="color: #9f9f9f;">Không có sản phẩm nào được chọn</p>
+                <?php
+                if (in_array('po_create', $user['permissions'])) { ?>
+                    <div class="dashboard_content_main">
+                        <div class="row">
+                            <div class="column column-12">
+                                <h1 class="section_header"><i class="fa fa-plus"></i> Đơn Hàng</h1>
+                                <div>
+                                    <form action="database/save-order.php" method="POST">
+                                        <div class="alignRight">
+                                            <button type="button" class="orderBtn orderProductBtn" id="orderProductBtn">
+                                                Đặt Hàng Sản Phẩm </button>
                                         </div>
-                                    </div>
-                                    <div class="alignRight marginTop20">
-                                        <button type="submit" class="orderBtn submitOrderProductBtn">Xác Nhận</button>
-                                    </div>
-                                </form>
-                            </div>
-                            <?php
-                            if (isset($_SESSION['response'])) {
-                                $response_message = $_SESSION['response']['message'];
-                                $is_success = $_SESSION['response']['success'];
-                            ?>
+                                        <div id="orderProductLists">
 
-                                <div class="responseMessage">
-                                    <p
-                                        class="responseMessage <?= $is_success ? 'responseMessage__success' : 'responseMessage__error' ?>">
-                                        <?= $response_message ?>
-                                    </p>
+                                            <div id="orderProductLists">
+                                                <p id="noData" style="color: #9f9f9f;">Không có sản phẩm nào được chọn</p>
+                                            </div>
+                                        </div>
+                                        <div class="alignRight marginTop20">
+                                            <button type="submit" class="orderBtn submitOrderProductBtn">Xác Nhận</button>
+                                        </div>
+                                    </form>
                                 </div>
+                                <?php
+                                if (isset($_SESSION['response'])) {
+                                    $response_message = $_SESSION['response']['message'];
+                                    $is_success = $_SESSION['response']['success'];
+                                ?>
 
-                            <?php unset($_SESSION['response']);
-                            } ?>
+                                    <div class="responseMessage">
+                                        <p
+                                            class="responseMessage <?= $is_success ? 'responseMessage__success' : 'responseMessage__error' ?>">
+                                            <?= $response_message ?>
+                                        </p>
+                                    </div>
 
+                                <?php unset($_SESSION['response']);
+                                } ?>
+
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php } else { ?>
+                    <div id="errorMessage">
+                        Không được cho phép
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -91,7 +98,7 @@ $products = json_encode($products ?? []);
             let productOptions = '\
                 <div>\
                     <label for="product_name">Tên sản phẩm</label>\
-                    <select name="product_name" class="productNameSelect" id="product_name">\
+                    <select name="products_name[]" class="productNameSelect" id="product_name">\
                         <option value="">Chọn Sản Phẩm</options>\
                         INSERTPRODUCTHERE\
                     </select>\

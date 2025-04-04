@@ -19,6 +19,7 @@ try {
         $stmt = $conn->prepare($sql_delete_product);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
+        
     }
     // Xử lý các trường hợp khác (suppliers, ...)
     else {

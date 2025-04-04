@@ -37,6 +37,8 @@ $suppliers = include('database/show.php');
         <div class="dashboard_content_container">
             <?php include('partials/app_topnav.php') ?>
             <div class="dashboard_content">
+            <?php
+            if(in_array('po_view',$user['permissions'])){?>
                 <div class="dashboard_content_main">
                     <div class="row">
                         <div class="column column-12">
@@ -117,9 +119,11 @@ $suppliers = include('database/show.php');
                                                     } ?>
                                                 </tbody>
                                             </table>
+                                            <?php if(in_array('po_edit',$user['permissions'])){ ?>
                                             <div class="poOrderUpdateBtnContainer alignRight">
                                                 <button class="appbtn updatePoBtn" data-id="<?= $batch_id ?>">Cập Nhật</button>
                                             </div>
+                                            <?php } ?>
                                         </div>
                                     <?php } ?>
                                 </div>
@@ -127,6 +131,11 @@ $suppliers = include('database/show.php');
                         </div>
                     </div>
                 </div>
+                <?php } else {?>
+                    <div id="errorMessage">
+                        Không được cho phép
+                    </div>
+                <?php } ?> 
             </div>
         </div>
     </div>
