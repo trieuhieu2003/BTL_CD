@@ -3,16 +3,15 @@ session_start();
 
 if (!isset($_SESSION['user']))
     header('location: login.php');
+
+include('database/connection.php'); // Đảm bảo bạn đã có file này để kết nối CSDL
+
 $show_table = 'suppliers';
-
 $suppliers = include('database/show.php');
-
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,10 +20,6 @@ $suppliers = include('database/show.php');
     <link rel="stylesheet" href="css/user_add.css">
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"
-        integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/css/bootstrap-dialog.min.css"
         integrity="sha512-PvZCtvQ6xGBLWHcXnyHD67NTP+a+bNrToMsIdX/NUqhw+npjLDhlMZ/PhSHZN4s9NdmuumcxKHQqbHlGVqc8ow=="
@@ -37,110 +32,94 @@ $suppliers = include('database/show.php');
         <div class="dashboard_content_container">
             <?php include('partials/app_topnav.php') ?>
             <div class="dashboard_content">
-            <?php
-            if(in_array('po_view',$user['permissions'])){?>
-                <div class="dashboard_content_main">
-                    <div class="row">
-                        <div class="column column-12">
-                            <h1 class="section_header"><i class="fa fa-list"></i> Danh sách đơn hàng</h1>
-                            <div class="section_content">
-                                <div class="poListContainers">
-                                    <?php
-                                    $stmt = $conn->prepare("
-                                        SELECT order_product.id, products.product_name, order_product.quantity_ordered, users.first_name, order_product.batch,
-                                        order_product.quantity_received,
-                                               users.last_name, suppliers.supplier_name, order_product.status, order_product.created_at
-                                        FROM order_product, suppliers, products, users
-                                        WHERE 
-                                            order_product.supplier = suppliers.id
-                                            AND order_product.product = products.id
-                                            AND order_product.created_by = users.id
-                                        ORDER BY 
-                                            order_product.created_at DESC
-                                    ");
-                                    $stmt->execute();
-                                    $purchase_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                                    $data = [];
-                                    foreach ($purchase_orders as $purchase_order) {
-                                        $data[$purchase_order['batch']][] = $purchase_order;
-                                    }
+                <?php if(in_array('po_view', $_SESSION['user']['permissions'])) { ?>
+                    <div class="dashboard_content_main">
+                        <div class="row">
+                            <div class="column column-12">
+                                <h1 class="section_header"><i class="fa fa-list"></i> Danh sách đơn hàng</h1>
+                                <div class="section_content">
+                                    <div class="poListContainers">
+                                        <?php
+                                        $stmt = $conn->prepare("
+                                            SELECT order_product.id, products.product_name, order_product.quantity_ordered, users.first_name, order_product.batch,
+                                            order_product.quantity_received,
+                                            users.last_name, suppliers.supplier_name, order_product.status, order_product.created_at
+                                            FROM order_product, suppliers, products, users
+                                            WHERE 
+                                                order_product.supplier = suppliers.id
+                                                AND order_product.product = products.id
+                                                AND order_product.created_by = users.id
+                                            ORDER BY 
+                                                order_product.created_at DESC
+                                        ");
+                                        $stmt->execute();
+                                        $purchase_orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                                    $data = [];
-                                    foreach ($purchase_orders as $purchase_order) {
-                                        $data[$purchase_order['batch']][] = $purchase_order;
-                                    }
-                                    ?>
-
-                                    <?php
-                                    foreach ($data as $batch_id => $batch_po) {
-
+                                        $data = [];
+                                        foreach ($purchase_orders as $purchase_order) {
+                                            $data[$purchase_order['batch']][] = $purchase_order;
+                                        }
                                         ?>
 
-
-
-                                        <div class="poList" id="container-<?= $batch_id ?>">
-                                            <p>Batch #: <?= $batch_id ?> </p>
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Sản Phẩm</th>
-                                                        <th>Số lượng đặt hàng</th>
-                                                        <th>Thực Nhận</th>
-                                                        <th>Nhà Cung Cấp</th>
-                                                        <th>Trạng Thái</th>
-                                                        <th>Đặt Bởi</th>
-                                                        <th>Ngày Đặt</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php
-                                                    $index = 1;
-                                                    foreach ($batch_po as $batch_po) {
-                                                        ?>
+                                        <?php foreach ($data as $batch_id => $batch_po) { ?>
+                                            <div class="poList" id="container-<?= $batch_id ?>">
+                                                <p>Batch #: <?= $batch_id ?> </p>
+                                                <table>
+                                                    <thead>
                                                         <tr>
-                                                            <td><?= $index ?></td>
-                                                            <td class="po_product"><?= $batch_po['product_name'] ?></td>
-                                                            <td class="po_qty_ordered"><?= $batch_po['quantity_ordered'] ?></td>
-                                                            <td class="po_qty_received"><?= $batch_po['quantity_received'] ?>
-                                                            </td>
-                                                            <td class="po_qty_supplier"><?= $batch_po['supplier_name'] ?></td>
-                                                            <td class="po_qty_status">
-                                                                <span class="po-badge po-badge-<?= $batch_po['status'] ?>">
-                                                                    <?= $batch_po['status'] ?>
-                                                                </span>
-                                                            </td>
-                                                            <td><?= $batch_po['first_name'] . ' ' . $batch_po['last_name'] ?>
-                                                            </td>
-                                                            <td>
-                                                                <?= $batch_po['created_at'] ?>
-                                                                <input type="hidden" class="po_qty_row_id"
-                                                                    value="<?= $batch_po['id'] ?>">
-                                                            </td>
+                                                            <th>#</th>
+                                                            <th>Sản Phẩm</th>
+                                                            <th>Số lượng đặt hàng</th>
+                                                            <th>Thực Nhận</th>
+                                                            <th>Nhà Cung Cấp</th>
+                                                            <th>Trạng Thái</th>
+                                                            <th>Đặt Bởi</th>
+                                                            <th>Ngày Đặt</th>
                                                         </tr>
+                                                    </thead>
+                                                    <tbody>
                                                         <?php
-                                                        $index++;
-                                                    } ?>
-                                                </tbody>
-                                            </table>
-                                            <?php if(in_array('po_edit',$user['permissions'])){ ?>
-                                            <div class="poOrderUpdateBtnContainer alignRight">
-                                                <button class="appbtn updatePoBtn" data-id="<?= $batch_id ?>">Cập Nhật</button>
+                                                        $index = 1;
+                                                        foreach ($batch_po as $po) { ?>
+                                                            <tr>
+                                                                <td><?= $index ?></td>
+                                                                <td class="po_product"><?= $po['product_name'] ?></td>
+                                                                <td class="po_qty_ordered"><?= $po['quantity_ordered'] ?></td>
+                                                                <td class="po_qty_received"><?= $po['quantity_received'] ?></td>
+                                                                <td class="po_qty_supplier"><?= $po['supplier_name'] ?></td>
+                                                                <td class="po_qty_status">
+                                                                    <span class="po-badge po-badge-<?= $po['status'] ?>">
+                                                                        <?= $po['status'] ?>
+                                                                    </span>
+                                                                </td>
+                                                                <td><?= $po['first_name'] . ' ' . $po['last_name'] ?></td>
+                                                                <td>
+                                                                    <?= $po['created_at'] ?>
+                                                                    <input type="hidden" class="po_qty_row_id" value="<?= $po['id'] ?>">
+                                                                </td>
+                                                            </tr>
+                                                        <?php $index++; } ?>
+                                                    </tbody>
+                                                </table>
+                                                <?php if(in_array('po_edit', $_SESSION['user']['permissions'])){ ?>
+                                                    <div class="poOrderUpdateBtnContainer alignRight">
+                                                        <button class="appbtn updatePoBtn" data-id="<?= $batch_id ?>">Cập Nhật</button>
+                                                    </div>
+                                                <?php } ?>
                                             </div>
-                                            <?php } ?>
-                                        </div>
-                                    <?php } ?>
+                                        <?php } ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <?php } else {?>
+                <?php } else { ?>
                     <div id="errorMessage">
                         Không được cho phép
                     </div>
-                <?php } ?> 
+                <?php } ?>
+
             </div>
         </div>
     </div>

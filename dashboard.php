@@ -43,7 +43,7 @@ $user = $_SESSION['user'];
             <?php include('partials/app_topnav.php')?>
             <?php if(in_array('dashboard_view',$user['permissions'])){?>
                 <div class="dashboard_content_main">
-                    <div class="col50">
+                    <!-- <div class="col50">
                     <figure class="highcharts-figure">
                         <div id="container"></div>
                             <p class="highcharts-description">
@@ -65,7 +65,7 @@ $user = $_SESSION['user'];
                     </div>
                     <div id = "deliveryHistory">
 
-                </div>
+                </div> -->
                 <?php } else {?>
                     <div id="errorMessage">
                         Không được cho phép
