@@ -2,7 +2,7 @@
 session_start();
 
 $post_data = $_POST;
-$products = $post_data['products'];
+$products = $post_data['products_name'];
 $qty = array_values($post_data['quantity']);
 
 $post_data_arr = [];
@@ -46,7 +46,7 @@ try {
 
 
             $stmt = $conn->prepare($sql);
-            $stmt->execute($supplier_data);
+            $stmt->execute($value);
         }
     }
     $success = true;

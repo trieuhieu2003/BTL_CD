@@ -65,17 +65,12 @@ $suppliers = include('database/show.php');
                                     foreach ($purchase_orders as $purchase_order) {
                                         $data[$purchase_order['batch']][] = $purchase_order;
                                     }
-
-                                    $data = [];
-                                    foreach ($purchase_orders as $purchase_order) {
-                                        $data[$purchase_order['batch']][] = $purchase_order;
-                                    }
                                     ?>
 
                                     <?php
                                     foreach ($data as $batch_id => $batch_po) {
 
-                                        ?>
+                                    ?>
 
 
 
@@ -98,7 +93,7 @@ $suppliers = include('database/show.php');
                                                     <?php
                                                     $index = 1;
                                                     foreach ($batch_po as $batch_po) {
-                                                        ?>
+                                                    ?>
                                                         <tr>
                                                             <td><?= $index ?></td>
                                                             <td class="po_product"><?= $batch_po['product_name'] ?></td>
@@ -119,7 +114,7 @@ $suppliers = include('database/show.php');
                                                                     value="<?= $batch_po['id'] ?>">
                                                             </td>
                                                         </tr>
-                                                        <?php
+                                                    <?php
                                                         $index++;
                                                     } ?>
                                                 </tbody>
@@ -149,12 +144,11 @@ $suppliers = include('database/show.php');
 
     <script src="js/script.js"></script>
     <script>
-
         function Script() {
             var vm = this;
 
-            this.registerEvents = function () {
-                document.addEventListener('click', function (e) {
+            this.registerEvents = function() {
+                document.addEventListener('click', function(e) {
                     var targetElement = e.target;
                     var classList = targetElement.classList;
 
@@ -185,7 +179,7 @@ $suppliers = include('database/show.php');
                         }
 
                         var poListHtml = '\
-                    <table id="formTable_'+ batchNumber + '">\
+                    <table id="formTable_' + batchNumber + '">\
                         <thead>\
                         <tr>\
                             <th>Tên Sản Phẩm</th>\
@@ -211,7 +205,7 @@ $suppliers = include('database/show.php');
                                 <option value="incomplete" ' + (poList.status == 'incomplete' ? 'selected' : '') + '>Chưa đủ</option>\
                                 <option value="complete" ' + (poList.status == 'complete' ? 'selected' : '') + '>Hoàn thành</option>\
                             </select>\
-                            <input type="hidden" class="po_qty_row_id" value="'+ poList.id + '">\
+                            <input type="hidden" class="po_qty_row_id" value="' + poList.id + '">\
                         </td>\
                     </tr>\
                     ';
@@ -223,7 +217,7 @@ $suppliers = include('database/show.php');
                             type: BootstrapDialog.TYPE_PRIMARY,
                             title: 'Cập Nhật Đơn Hàng: Batch #: <strong>' + batchNumber + '</strong>',
                             message: poListHtml,
-                            callback: function (toAdd) {
+                            callback: function(toAdd) {
                                 // Nếu xác nhận
                                 if (toAdd) {
                                     var formTableContainer = 'formTable_' + batchNumber;
@@ -245,22 +239,23 @@ $suppliers = include('database/show.php');
 
                                     $.ajax({
                                         method: 'POST',
-                                        data: JSON.stringify({ payload: poListsArrForm }), // Chuyển đổi thành JSON string
+                                        data: JSON.stringify({
+                                            payload: poListsArrForm
+                                        }), // Chuyển đổi thành JSON string
                                         url: 'database/update-order.php',
                                         contentType: 'application/json', // Thêm content type
                                         dataType: 'json',
-                                        success: function (data) {
+                                        success: function(data) {
                                             BootstrapDialog.alert({
-                                                type: data.success
-                                                    ? BootstrapDialog.TYPE_SUCCESS
-                                                    : BootstrapDialog.TYPE_DANGER,
+                                                type: data.success ?
+                                                    BootstrapDialog.TYPE_SUCCESS : BootstrapDialog.TYPE_DANGER,
                                                 message: data.message,
-                                                callback: function () {
+                                                callback: function() {
                                                     if (data.success) location.reload();
                                                 }
                                             });
                                         },
-                                        error: function (xhr, status, error) {
+                                        error: function(xhr, status, error) {
                                             BootstrapDialog.alert({
                                                 type: BootstrapDialog.TYPE_DANGER,
                                                 message: 'Có lỗi xảy ra: ' + JSON.stringify(xhr.responseText)
@@ -274,16 +269,10 @@ $suppliers = include('database/show.php');
                 });
             };
 
-            this.initialize = function () {
+            this.initialize = function() {
                 this.registerEvents();
             };
         }
-
-        var myScript = new Script();
-        myScript.initialize();
-
-        var myScript = new Script();
-        myScript.initialize();
 
         var myScript = new Script(); // Tạo một đối tượng từ constructor
         myScript.initialize(); // Gọi phương thức từ đối tượng
