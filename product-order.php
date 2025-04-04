@@ -36,6 +36,8 @@ $products = json_encode($products ?? []);
         <div class="dashboard_content_container">
             <?php include('partials/app_topnav.php'); ?>
             <div class="dashboard_content">
+            <?php
+            if(in_array('po_create',$user['permissions'])){?>
                 <div class="dashboard_content_main">
                     <div class="row">
                         <div class="column column-12">
@@ -44,15 +46,16 @@ $products = json_encode($products ?? []);
                                 <form action="database/save-order.php" method="POST">
                                     <div class="alignRight">
                                         <button type="button" class="orderBtn orderProductBtn" id="orderProductBtn">
-                                            Order Product</button>
+                                            Đặt Hàng Sản Phẩm </button>
                                     </div>
                                     <div id="orderProductLists">
-                                        <p id="noData" style="color: #9f9f9f;">Không có sản phẩm nào được chọn</p>
-                                    </div>
 
+                                        <div id="orderProductLists">
+                                            <p id="noData" style="color: #9f9f9f;">Không có sản phẩm nào được chọn</p>
+                                        </div>
+                                    </div>
                                     <div class="alignRight marginTop20">
-                                        <button type="submit" class="orderBtn submitOrderProductBtn">Submit
-                                            Order</button>
+                                        <button type="submit" class="orderBtn submitOrderProductBtn">Xác Nhận</button>
                                     </div>
                                 </form>
                             </div>
@@ -60,7 +63,7 @@ $products = json_encode($products ?? []);
                             if (isset($_SESSION['response'])) {
                                 $response_message = $_SESSION['response']['message'];
                                 $is_success = $_SESSION['response']['success'];
-                                ?>
+                            ?>
 
                                 <div class="responseMessage">
                                     <p
@@ -69,12 +72,17 @@ $products = json_encode($products ?? []);
                                     </p>
                                 </div>
 
-                                <?php unset($_SESSION['response']);
+                            <?php unset($_SESSION['response']);
                             } ?>
 
                         </div>
                     </div>
                 </div>
+                <?php } else {?>
+                    <div id="errorMessage">
+                        Không được cho phép
+                    </div>
+                <?php } ?> 
             </div>
         </div>
     </div>
@@ -90,29 +98,29 @@ $products = json_encode($products ?? []);
             let productOptions = '\
                 <div>\
                     <label for="product_name">Tên sản phẩm</label>\
-                    <select name="product_name[]" class="productNameSelect" id="product_name">\
+                    <select name="product_name" class="productNameSelect" id="product_name">\
                         <option value="">Chọn Sản Phẩm</options>\
                         INSERTPRODUCTHERE\
                     </select>\
                     <button class="appbtn removeOrderBtn">Loại Bỏ</button>\
                 </div>';
 
-            this.initialize = function () {
+            this.initialize = function() {
                 this.registerEvents();
                 this.renderProductOptions();
             };
 
-            this.initialize = function () {
-                let optionHtml = '';
-                products.forEach((product) => {
-                    optionHtml += '<option value="' + product.id + '">' + product.product_name + '</option>';
-                })
+            this.renderProductOptions = function() {
+                    let optionHtml = '';
+                    products.forEach((product) => {
+                        optionHtml += '<option value="' + product.id + '">' + product.product_name + '</option>';
+                    })
 
-                productOptions = productOptions.replace('INSERTPRODUCTHERE', optionHtml);
-            },
+                    productOptions = productOptions.replace('INSERTPRODUCTHERE', optionHtml);
+                },
 
-                this.registerEvents = function () {
-                    document.addEventListener('click', function (e) {
+                this.registerEvents = function() {
+                    document.addEventListener('click', function(e) {
                         let targetElement = e.target;
                         classList = targetElement.classList;
 
@@ -123,7 +131,7 @@ $products = json_encode($products ?? []);
 
                             orderProductLists.innerHTML += '\
                                 <div class="orderProductRow">\
-                                    '+ productOptions +'\
+                                    ' + productOptions + '\
                                     <div class="supplierRows" id="supplierRows_' + counter + '" data-counter="' + counter + '"></div>\
                                 </div>';
 
@@ -144,31 +152,33 @@ $products = json_encode($products ?? []);
                         // }
                     });
 
-                    document.addEventListener('change', function (e) {
+                    document.addEventListener('change', function(e) {
                         targetElement = e.target;
                         classList = targetElement.classList;
 
                         if (classList.contains('productNameSelect')) {
                             let pid = targetElement.value;
-                            
+
                             let counterId = targetElement
-                            .closest('div.orderProductRow')
-                            .querySelector('.suppliersRows')
-                            .dataset.counter;
+                                .closest('div.orderProductRow')
+                                .querySelector('.supplierRows')
+                                .dataset.counter;
 
 
-                            $.get('database/get-product-suppliers.php', { id: pid }, function (suppliers) {
-                                    vm.renderSupplierRows(suppliers, counterId);
-                                }, 'json');
+                            $.get('database/get-product-suppliers.php', {
+                                id: pid
+                            }, function(suppliers) {
+                                vm.renderSupplierRows(suppliers, counterId);
+                            }, 'json');
                         }
                     });
                 };
 
-            this.renderSupplierRows = function (suppliers, counterId) {
+            this.renderSupplierRows = function(suppliers, counterId) {
                 let supplierRows = '';
 
                 suppliers.forEach((supplier) => {
-                    supplierRows += '\
+                    supplierRows = '\
                         <div class="row">\
                             <div style="width: 50%;">\
                                 <p class="supplierName">' + supplier.supplier_name + '</p>\
@@ -176,7 +186,7 @@ $products = json_encode($products ?? []);
                             <div style="width: 50%;">\
                                 <label for="quantity">Số lượng: </label>\
                                 <input type="number" class="appFormInput orderProductQty" id="quantity"\
-                                    placeholder="Nhập số lượng..." name="quantity['+ counterId + '][' + supplier.id + ']" />\
+                                    placeholder="Nhập số lượng..." name="quantity[' + counterId + '][' + supplier.id + ']" />\
                             </div>\
                         </div>';
                 });

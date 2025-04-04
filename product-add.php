@@ -34,6 +34,8 @@ $user = $_SESSION['user'];
         <div class="dashboard_content_container">
             <?php include('partials/app_topnav.php') ?>
             <div class="dashboard_content">
+            <?php if(in_array('product_create',$user['permissions'])){?>
+
                 <div class="dashboard_content_main">
                     <div class="row">
                         <div class="column column-12">
@@ -99,6 +101,11 @@ $user = $_SESSION['user'];
                         </div>
                     </div>
                 </div>
+                <?php } else {?>
+                    <div id="errorMessage">
+                        Không được cho phép
+                    </div>
+                <?php } ?>  
             </div>
         </div>
 

@@ -38,6 +38,7 @@ $products = include('database/show.php');
         <div class="dashboard_content_container">
             <?php include('partials/app_topnav.php') ?>
             <div class="dashboard_content">
+            <?php if(in_array('product_view',$user['permissions'])){?>
                 <div class="dashboard_content_main">
                     <div class="row">
                         <div class="column column-12">
@@ -120,11 +121,18 @@ $products = include('database/show.php');
                         </div>
 
                     </div>
+                
+                    <?php } else {?>
+                    <div id="errorMessage">
+                        Không được cho phép
+                    </div>
+                <?php } ?>  
                 </div>
             </div>
         </div>
 
     </div>
+    
 
     <?php
     include('partials/app-scripts.php');
@@ -184,6 +192,13 @@ $products = include('database/show.php');
                             })
 
                         }
+                    }
+                    if (classList.contains('accessDeniedError')) {
+                        e.preventDefault();
+                        BootstrapDialog.alert({
+                            type: BootstrapDialog.TYPE_DANGER,
+                            message: 'Không được cho phép'
+                        });
                     }
 
                     if (classList.contains('updateProduct')) {

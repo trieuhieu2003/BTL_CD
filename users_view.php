@@ -10,6 +10,8 @@ $show_table = 'users';
 
 $users = include('database/show.php');
 
+$user_permission = $user['permissions'];
+
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +38,12 @@ $users = include('database/show.php');
         <div class="dashboard_content_container">
             <?php include('partials/app_topnav.php') ?>
             <div class="dashboard_content">
+<<<<<<< HEAD
                 
+=======
+            <?php if(in_array('user_view',$user['permissions'])){?>
+
+>>>>>>> origin/main
                 <div class="dashboard_content_main">
                     <div class="row">
                         <div class="column column-12">
@@ -68,8 +75,10 @@ $users = include('database/show.php');
                                                     <td><?= date('M d,Y @ h:i:s A', strtotime($user['updated_at'])) ?></td>
 
                                                     <td>
-                                                        <a href="" class="updateUser" data-userid="<?= $user['id'] ?>"><i class="fa fa-pencil"></i>Sửa</a>
-                                                        <a href="" class="deleteUser" data-userid="<?= $user['id'] ?>" data-fname="<?= $user['first_name'] ?>" data-lname="<?= $user['last_name'] ?>"><i class="fa fa-trash"></i>Xoá</a>
+                                                        <a href="" class="<?= in_array('user_edit',$user_permission)? 'updateUser':'accessDeniedError' ?> " 
+                                                        data-userid="<?= $user['id'] ?>"><i class="fa fa-pencil"></i>Sửa</a>
+                                                        <a href="" class="<?= in_array('user_delete',$user_permission)? 'deleteUser':'accessDeniedError' ?> " 
+                                                        data-userid="<?= $user['id'] ?>" data-fname="<?= $user['first_name'] ?>" data-lname="<?= $user['last_name'] ?>"><i class="fa fa-trash"></i>Xoá</a>
                                                         <input type="hidden" id="cur_permission_<?= $user['id'] ?>" value="<?= $user['permissions'] ?>">
                                                     </td>
                                                 </tr>
@@ -84,6 +93,11 @@ $users = include('database/show.php');
 
                     </div>
                 </div>
+                <?php } else {?>
+                    <div id="errorMessage">
+                        Không được cho phép
+                    </div>
+                <?php } ?>  
             </div>
         </div>
 
@@ -228,6 +242,15 @@ $users = include('database/show.php');
                     document.addEventListener('click', function(e) {
                         targetElement = e.target;
                         classList = targetElement.classList;
+                        
+
+                        if (classList.contains('accessDeniedError')) {
+                        e.preventDefault();
+                        BootstrapDialog.alert({
+                            type: BootstrapDialog.TYPE_DANGER,
+                            message: 'Không được cho phép'
+                        });
+                    }
 
 
                         let target = e.target;
