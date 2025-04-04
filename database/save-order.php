@@ -2,8 +2,8 @@
 session_start();
 
 $post_data = $_POST;
-$products = $post_data['products']; // Mảng sản phẩm được gửi lên từ form
-$qty = array_values($post_data['quantity']); // Lấy tất cả số lượng
+$products = $post_data['products_name'];
+$qty = array_values($post_data['quantity']);
 
 // Mảng chứa dữ liệu sản phẩm và số lượng
 $post_data_arr = [];
@@ -49,7 +49,7 @@ try {
 
             // Thực thi câu lệnh SQL
             $stmt = $conn->prepare($sql);
-            $stmt->execute($value); // Thay đổi biến `$supplier_data` thành `$value`
+            $stmt->execute($value);
         }
     }
 
