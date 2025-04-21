@@ -94,7 +94,7 @@
                     </div>
                 </div>
             </div>
-            <div class="permission">
+            <!-- <div class="permission">
                 <div class="row">
                     <div class="col-md-3">
                         <p class="moduleName">Điểm Bán</p>
@@ -103,6 +103,6 @@
                         <p class="moduleFunc" data-value="pos">Trợ Cấp</p>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>

@@ -216,16 +216,6 @@ $user_permission = $user['permissions'];
                                     </div>\
                                 </div>\
                             </div>\
-                            <div class="permission">\
-                                <div class="row">\
-                                    <div class="col-md-3">\
-                                        <p class="moduleName">Điểm Bán</p>\
-                                    </div>\
-                                    <div class="col-md-2">\
-                                        <p class="moduleFunc" data-value="pos">Trợ Cấp</p>\
-                                    </div>\
-                                </div>\
-                            </div>\
                         </div>\
                     </div>';
 
